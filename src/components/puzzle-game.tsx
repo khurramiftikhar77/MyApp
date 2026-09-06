@@ -1,5 +1,5 @@
-import { AgeSelectScreen } from '@/screens/AgeSelectScreen';
 import { DisclaimerScreen } from '@/screens/DisclaimerScreen';
+import { GameHistoryScreen } from '@/screens/GameHistoryScreen';
 import { LoginScreen } from '@/screens/LoginScreen';
 import { PuzzleSelectScreen } from '@/screens/PuzzleSelectScreen';
 import { QuizScreen } from '@/screens/QuizScreen';
@@ -7,17 +7,17 @@ import { AnsweredQuestion, ResultsScreen } from '@/screens/ResultsScreen';
 import { StartScreen } from '@/screens/StartScreen';
 import { AgeGroup, Puzzle, PuzzleType } from '@/types/game';
 import { getGameResultMessage, getRandomPuzzles } from '@/utils/gameUtils';
-import { getUser, saveUser, updateUserInfo, updateUserProgress } from '@/utils/userStorage';
+import { getUser, recordGameResult, saveUser, updateUserInfo, updateUserProgress } from '@/utils/userStorage';
 import { useEffect, useState } from 'react';
 
 type GameScreenState =
   | 'disclaimer'
   | 'login'
-  | 'ageSelect'
   | 'puzzleSelect'
   | 'playing'
   | 'results'
-  | 'editProfile';
+  | 'editProfile'
+  | 'history';
 
 export function PuzzleGameComponent() {
   const [showStart, setShowStart] = useState(true);
@@ -28,7 +28,7 @@ export function PuzzleGameComponent() {
   const [ageGroup, setAgeGroup] = useState<AgeGroup | null>(null);
   const [puzzleType, setPuzzleType] = useState<PuzzleType | null>(null);
   const [gameState, setGameState] = useState<GameScreenState>('disclaimer');
-  const [preEditState, setPreEditState] = useState<GameScreenState>('ageSelect');
+  const [preEditState, setPreEditState] = useState<GameScreenState>('puzzleSelect');
   const [puzzles, setPuzzles] = useState<Puzzle[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
@@ -40,18 +40,19 @@ export function PuzzleGameComponent() {
   // Check if user already exists
   useEffect(() => {
     let isMounted = true;
-    
+
     const checkExistingUser = async () => {
       try {
         const existingUser = await getUser();
         if (!isMounted) return;
-        
+
         if (existingUser) {
           setUserLoggedIn(true);
           setUserName(existingUser.nickname);
           setBirthYear(existingUser.birthYear);
           setDisclaimerAccepted(true);
-          setGameState('ageSelect');
+          setAgeGroup('over18');
+          setGameState('puzzleSelect');
         } else {
           // No existing user, show disclaimer
           setGameState('disclaimer');
@@ -68,12 +69,12 @@ export function PuzzleGameComponent() {
         }
       }
     };
-    
+
     // Small delay to ensure AsyncStorage is ready
     const timer = setTimeout(() => {
       checkExistingUser();
     }, 100);
-    
+
     return () => {
       isMounted = false;
       clearTimeout(timer);
@@ -89,9 +90,9 @@ export function PuzzleGameComponent() {
     setGameState('disclaimer');
   };
 
-  const handleLogin = async (nickname: string, newBirthYear: number) => {
+  const handleLogin = async (nickname: string, newBirthYear: number, weight?: number, isNormalHuman?: boolean) => {
     try {
-      await saveUser(nickname, newBirthYear);
+      await saveUser(nickname, newBirthYear, weight, isNormalHuman);
     } catch (error) {
       console.error('Login error:', error);
       // Still allow user to proceed even if storage fails
@@ -99,7 +100,8 @@ export function PuzzleGameComponent() {
       setUserLoggedIn(true);
       setUserName(nickname);
       setBirthYear(newBirthYear);
-      setGameState('ageSelect');
+      setAgeGroup('over18');
+      setGameState('puzzleSelect');
     }
   };
 
@@ -108,9 +110,9 @@ export function PuzzleGameComponent() {
     setGameState('editProfile');
   };
 
-  const handleSaveProfile = async (nickname: string, newBirthYear: number) => {
+  const handleSaveProfile = async (nickname: string, newBirthYear: number, weight?: number, isNormalHuman?: boolean) => {
     try {
-      await updateUserInfo(nickname, newBirthYear);
+      await updateUserInfo(nickname, newBirthYear, weight, isNormalHuman);
     } catch (error) {
       console.error('Error updating profile:', error);
     } finally {
@@ -124,8 +126,12 @@ export function PuzzleGameComponent() {
     setGameState(preEditState);
   };
 
-  const handleAgeSelect = (age: AgeGroup) => {
-    setAgeGroup(age);
+  const handleViewHistory = () => {
+    setPreEditState(gameState);
+    setGameState('history');
+  };
+
+  const handleCloseHistory = () => {
     setGameState('puzzleSelect');
   };
 
@@ -139,7 +145,7 @@ export function PuzzleGameComponent() {
     setGameState('playing');
   };
 
-  const handleAnswer = (userAnswer: string, isCorrect: boolean) => {
+  const handleAnswer = (userAnswer: string, isCorrect: boolean, feedbackMessage: string) => {
     let newCorrectCount = correctCount;
     if (isCorrect) {
       newCorrectCount = correctCount + 1;
@@ -154,6 +160,7 @@ export function PuzzleGameComponent() {
         userAnswer,
         correctAnswer: currentPuzzle.correctAnswer,
         isCorrect,
+        feedbackMessage,
       },
     ]);
 
@@ -168,8 +175,9 @@ export function PuzzleGameComponent() {
       setResultMessage(message);
       setGameState('results');
 
-      // Update user progress
+      // Update user progress and history
       updateUserProgress(newCorrectCount, 5);
+      recordGameResult(puzzleType!, newCorrectCount, 5, won);
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
@@ -193,13 +201,12 @@ export function PuzzleGameComponent() {
   };
 
   const handleBackHome = () => {
-    setAgeGroup(null);
     setPuzzleType(null);
     setCurrentQuestionIndex(0);
     setCorrectCount(0);
     setAnswers([]);
     setResultMessage('');
-    setGameState('ageSelect');
+    setGameState('puzzleSelect');
   };
 
   if (showStart) {
@@ -236,15 +243,15 @@ export function PuzzleGameComponent() {
     );
   }
 
-  if (gameState === 'ageSelect') {
-    return <AgeSelectScreen onSelectAge={handleAgeSelect} userName={userName} onEditProfile={handleEditProfile} />;
+  if (gameState === 'history') {
+    return <GameHistoryScreen userName={userName} onBack={handleCloseHistory} onEditProfile={handleEditProfile} />;
   }
 
   if (gameState === 'puzzleSelect') {
     return (
       <PuzzleSelectScreen
         onSelectType={handlePuzzleSelect}
-        onBack={handleBackHome}
+        onViewHistory={handleViewHistory}
         userName={userName}
         onEditProfile={handleEditProfile}
       />

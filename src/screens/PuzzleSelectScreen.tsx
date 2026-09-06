@@ -7,12 +7,12 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 interface PuzzleSelectScreenProps {
   onSelectType: (type: PuzzleType) => void;
-  onBack: () => void;
+  onViewHistory: () => void;
   userName: string;
   onEditProfile: () => void;
 }
 
-export function PuzzleSelectScreen({ onSelectType, onBack, userName, onEditProfile }: PuzzleSelectScreenProps) {
+export function PuzzleSelectScreen({ onSelectType, onViewHistory, userName, onEditProfile }: PuzzleSelectScreenProps) {
   const [selectedType, setSelectedType] = useState<PuzzleType>('math');
 
   return (
@@ -21,7 +21,7 @@ export function PuzzleSelectScreen({ onSelectType, onBack, userName, onEditProfi
         <UserHeader name={userName} onEdit={onEditProfile} />
 
         <ThemedText type="title" style={styles.heading}>
-          Choose Puzzle Type
+          🎯 Choose Puzzle Type
         </ThemedText>
         <ThemedText type="subtitle" style={styles.subheading}>
           You need 3 correct answers out of 5 to win!
@@ -54,7 +54,7 @@ export function PuzzleSelectScreen({ onSelectType, onBack, userName, onEditProfi
         </View>
 
         <ThemedText style={styles.typeDesc}>
-          {selectedType === 'math' ? 'Solve numerical problems' : 'Answer questions and trivia'}
+          {selectedType === 'math' ? '🔢 Numbers, patterns, and sneaky logic' : '🧩 Riddles and brain teasers'}
         </ThemedText>
 
         <TouchableOpacity
@@ -62,16 +62,16 @@ export function PuzzleSelectScreen({ onSelectType, onBack, userName, onEditProfi
           onPress={() => onSelectType(selectedType)}
         >
           <ThemedText type="defaultSemiBold" style={styles.startButtonText}>
-            Start Game →
+            🚀 Start Game →
           </ThemedText>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.backButton}
-          onPress={onBack}
+          style={styles.historyButton}
+          onPress={onViewHistory}
         >
-          <ThemedText style={styles.backButtonText}>
-            ← Back
+          <ThemedText style={styles.historyButtonText}>
+            📊 My History
           </ThemedText>
         </TouchableOpacity>
       </View>
@@ -169,12 +169,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
   },
-  backButton: {
+  historyButton: {
     marginTop: 24,
     paddingVertical: 12,
     paddingHorizontal: 30,
   },
-  backButtonText: {
+  historyButtonText: {
     fontSize: 16,
     color: '#007AFF',
     fontWeight: '600',

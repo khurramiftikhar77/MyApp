@@ -10,6 +10,7 @@ export interface AnsweredQuestion {
   userAnswer: string;
   correctAnswer: string;
   isCorrect: boolean;
+  feedbackMessage: string;
 }
 
 interface ResultsScreenProps {
@@ -72,7 +73,7 @@ export function ResultsScreen({
 
         <View style={styles.reviewBox}>
           <ThemedText type="defaultSemiBold" style={styles.reviewTitle}>
-            Your Answers:
+            📝 Your Answers:
           </ThemedText>
           {answers.map((answer, index) => (
             <View
@@ -88,6 +89,11 @@ export function ResultsScreen({
               {!answer.isCorrect && (
                 <ThemedText style={styles.reviewCorrectAnswer}>
                   Correct answer: {answer.correctAnswer}
+                </ThemedText>
+              )}
+              {answer.feedbackMessage && (
+                <ThemedText style={styles.reviewFeedback}>
+                  💬 "{answer.feedbackMessage}"
                 </ThemedText>
               )}
             </View>
@@ -250,6 +256,12 @@ const styles = StyleSheet.create({
     marginTop: 2,
     color: '#50C878',
     fontWeight: '600',
+  },
+  reviewFeedback: {
+    fontSize: 12,
+    marginTop: 6,
+    fontStyle: 'italic',
+    opacity: 0.75,
   },
   buttonContainer: {
     width: '100%',

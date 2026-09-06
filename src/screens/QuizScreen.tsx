@@ -4,7 +4,17 @@ import { UserHeader } from '@/components/user-header';
 import { AgeGroup, Puzzle } from '@/types/game';
 import { checkAnswer, getRandomMessage, pickUniqueMessage } from '@/utils/gameUtils';
 import { useEffect, useRef, useState } from 'react';
-import { Alert, StyleSheet, TextInput, TouchableOpacity, View, useColorScheme } from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View,
+  useColorScheme,
+} from 'react-native';
 import { timeoutMessages } from '@/data/messages';
 
 const HURRY_UP_THRESHOLD = 10;
@@ -16,7 +26,7 @@ interface QuizScreenProps {
   correctCount: number;
   ageGroup: AgeGroup;
   userName: string;
-  onAnswer: (answer: string, isCorrect: boolean) => void;
+  onAnswer: (answer: string, isCorrect: boolean, feedbackMessage: string) => void;
   onQuit: () => void;
   onEditProfile: () => void;
 }
@@ -83,7 +93,7 @@ export function QuizScreen({
   };
 
   const handleNext = () => {
-    onAnswer(userAnswer.trim(), timedOut ? false : feedback?.isCorrect || false);
+    onAnswer(userAnswer.trim(), timedOut ? false : feedback?.isCorrect || false, feedback?.message || '');
     setUserAnswer('');
     setFeedback(null);
     setShowingFeedback(false);
@@ -108,6 +118,15 @@ export function QuizScreen({
 
   return (
     <ThemedView style={styles.container}>
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoider}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
+      >
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
       <View style={styles.content}>
         <UserHeader name={userName} onEdit={onEditProfile} />
 
@@ -179,6 +198,8 @@ export function QuizScreen({
               onChangeText={setUserAnswer}
               onSubmitEditing={handleSubmit}
               editable={!showingFeedback && !timedOut}
+              keyboardType={puzzle.type === 'math' ? 'number-pad' : 'default'}
+              returnKeyType="done"
             />
 
             <TouchableOpacity
@@ -197,6 +218,8 @@ export function QuizScreen({
           </>
         )}
       </View>
+      </ScrollView>
+      </KeyboardAvoidingView>
     </ThemedView>
   );
 }
@@ -204,6 +227,12 @@ export function QuizScreen({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  keyboardAvoider: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,

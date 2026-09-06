@@ -369,6 +369,50 @@ export function getBirthYearJoke(birthYear: number): string {
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
+// LOGIN PAGE - blocked signup, creative insults for lying about your birth year
+export const underageBlockMessages = [
+  "Nice try, but the algorithm can smell a fake birth year from a mile away. Under-18 mode is closed. Come back when your prefrontal cortex finishes loading.",
+  "Cute. You typed a birth year and hoped nobody would do the math. We did the math.",
+  "Sorry kid, this arena is 18+. Go outside, touch grass, and try again in a few years.",
+  "Nope. Under-18 access is currently 'Coming Soon' - much like your fully developed judgment.",
+  "We see you. That birth year makes you younger than most of our insults. Denied.",
+  "Access denied. Come back when you can legally watch the content you're trying to access.",
+  "Bold move typing that birth year. Braver than smart, but still denied.",
+];
+
+export const overAgeBlockMessages = [
+  "Unless you're a time traveler or a vampire, that birth year is not happening. Try again.",
+  "Impressive. You've apparently outlived the pyramids. Try a real birth year.",
+  "That birth year predates sliced bread. We're calling shenanigans.",
+  "Nice try, Methuselah. Enter an actual birth year.",
+  "According to that math you should be a fossil in a museum, not tapping a touchscreen. Try again.",
+  "Either you're immortal or you fat-fingered that birth year. We're betting on the second one.",
+];
+
+// LOGIN PAGE - "Are you a normal human?" fun toggle reactions (no gating, just vibes)
+export const normalHumanYesReactions = [
+  "Suspiciously confident. We'll be the judge of that.",
+  "'Normal' is a strong word. Let's see you prove it.",
+  "Sure you are. Everyone says that right before failing question 2.",
+  "Bold claim. Loading skepticism...",
+];
+
+export const normalHumanNoReactions = [
+  "Honesty! Refreshing. Welcome, beautiful weirdo.",
+  "Finally, someone self-aware. Respect.",
+  "Same, honestly. Let's see how 'not normal' translates to puzzle skills.",
+  "At least you're not lying to us. Yet.",
+];
+
+// LOGIN PAGE - weight field reactions (purely for fun, has zero effect on gameplay)
+export const weightReactions = [
+  "Bold of us to ask. Bold of you to answer.",
+  "This has literally nothing to do with your puzzle skills, but thanks for playing along.",
+  "We don't know why we're asking either. Science, probably.",
+  "Filed under 'completely irrelevant but fun to know.'",
+  "Noted. Moving on, this changes nothing.",
+];
+
 // START SCREEN - rotating taglines, one picked at random each time the app opens
 export const startTaglines = [
   "A puzzle game that roasts you if you're wrong, and barely tolerates you if you're right.",

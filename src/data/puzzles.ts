@@ -27,7 +27,7 @@ export const mathPuzzles: Puzzle[] = [
   { id: 'm22', question: 'What is 100 minus half of 60?', correctAnswer: '70', type: 'math' },
   { id: 'm23', question: 'What comes next: 3, 6, 12, 24, ?', correctAnswer: '48', type: 'math' },
   { id: 'm24', question: 'What comes next: 100, 90, 80, ?', correctAnswer: '70', type: 'math' },
-  { id: 'm25', question: 'If today is Monday, what day will it be in 10 days?', correctAnswer: 'Thursday', type: 'math' },
+  { id: 'm25', question: 'How many days are in 3 weeks?', correctAnswer: '21', type: 'math' },
   { id: 'm26', question: 'A farmer has 17 sheep, and all but 9 run away. How many are left?', correctAnswer: '9', type: 'math' },
   { id: 'm27', question: 'What is half of 8 plus half of 4?', correctAnswer: '6', type: 'math' },
   { id: 'm28', question: 'I am odd, greater than 20, less than 30, and divisible by 5. What number am I?', correctAnswer: '25', type: 'math' },
