@@ -63,7 +63,7 @@ export const over18FortuneTeller = [
 // Congratulations for OVER 18 - FINAL GAME RESULT
 export const over18CongratulationMessages = [
   "You got brains. Beauty is missing but brains is okay.",
-  "WTF... how comes you still have critical thinking in the age of AI?",
+  "WTF... how come you still have critical thinking in the age of AI?",
   "Congrats... I am making notes. When AI will come to power, first intelligent people must go.",
   "Fucking awesome... not your life but how you solve the puzzle.",
   "Holy shit, you actually used your brain for once.",
@@ -189,13 +189,14 @@ export const timeoutMessages = [
 
 // LOGIN PAGE - NICKNAME FEEDBACK
 export const nicknameJokes = [
-  "Really? THIS is what you are going but okay...",
+  "Are you really going with that? Really? Okay...",
+  "Really? THIS is what you're going with? Okay then.",
   "That's... bold. I'll give you that.",
   "Well, that's certainly a choice.",
   "Interesting nickname energy. No judgment though.",
   "Okay okay, I see what you did there.",
   "That's what your parents named you? Jk, okay!",
-  "Alright, going with that eh?",
+  "Alright, really going with that huh?",
   "That's very... unique. Let's continue!",
   "Really trying to stand out, aren't we?",
   "That nickname has... potential. Sure.",
@@ -204,10 +205,40 @@ export const nicknameJokes = [
   "Wow, really leaning into that are we?",
   "That's definitely a name. Yes.",
   "I've seen bolder choices but sure, let's go!",
+  "You sure? Like, really really sure? Okay, your funeral.",
 ];
 
-// LOGIN PAGE - BIRTH YEAR FEEDBACK
-export const birthYearJokes = [
+// LOGIN PAGE - BIRTH YEAR FEEDBACK, split by age bracket
+
+// 18-29: barely legal, still figuring it out
+const twentiesJokes = [
+  "Oh, barely legal huh? Cute. Ask an adult for help if this gets too hard.",
+  "Still got that fresh-out-of-the-womb energy, I see.",
+  "Twenties, huh? Enjoy the metabolism while it lasts.",
+  "Young enough to still blame your phone for your attention span.",
+  "Ah, the 'I know everything' years. Adorable.",
+];
+
+// 30-44: adulting badly
+const thirtiesJokes = [
+  "Thirties, huh? Adulting badly but at least you're trying.",
+  "Old enough to know better, young enough to not care. Relatable.",
+  "Back pain's starting to kick in, isn't it?",
+  "You're at the age where 'going out' means being in bed by 10.",
+  "Somewhere between 'I got this' and 'what's happening to my knees'.",
+];
+
+// 45-59: midlife crisis territory
+const midlifeJokes = [
+  "Ooh, are you going through a midlife crisis already? Buy the sports car, we won't judge.",
+  "That's prime 'suddenly bought a motorcycle' age right there.",
+  "Midlife crisis loading... 47%... 48%...",
+  "You're at the age where you Google your symptoms and assume the worst.",
+  "Somewhere between 'wisdom' and 'why does everything hurt now'.",
+];
+
+// 60+: certified fossil
+const elderJokes = [
   "HAHAHA you fucking dinosaur! That's ancient!",
   "Holy shit, you're OLD! Welcome to the relic club!",
   "Wow, you remember when the internet was dial-up? RESPECT!",
@@ -224,6 +255,13 @@ export const birthYearJokes = [
   "You're a relic from when people actually READ books!",
   "That year exists?! You survived so much! Respect!",
 ];
+
+export function getBirthYearJoke(birthYear: number): string {
+  const age = new Date().getFullYear() - birthYear;
+  const pool =
+    age >= 60 ? elderJokes : age >= 45 ? midlifeJokes : age >= 30 ? thirtiesJokes : twentiesJokes;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
 
 // LOGIN PAGE - ENCOURAGING MESSAGES
 export const loginWelcome = [

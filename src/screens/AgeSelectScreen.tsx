@@ -12,7 +12,7 @@ export function AgeSelectScreen({ onSelectAge }: AgeSelectScreenProps) {
     <ThemedView style={styles.container}>
       <View style={styles.content}>
         <ThemedText type="title" style={styles.heading}>
-          Puzzle Challenge
+          What the Fun!
         </ThemedText>
         <ThemedText type="subtitle" style={styles.subheading}>
           How old are you?

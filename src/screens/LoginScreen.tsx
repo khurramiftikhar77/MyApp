@@ -1,8 +1,8 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { birthYearJokes, nicknameJokes } from '@/data/messages';
+import { getBirthYearJoke, nicknameJokes } from '@/data/messages';
 import { useState } from 'react';
-import { ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, TextInput, TouchableOpacity, View, useColorScheme } from 'react-native';
 
 interface LoginScreenProps {
   onLogin: (nickname: string, birthYear: number) => void;
@@ -15,6 +15,8 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
   const [birthYearReaction, setBirthYearReaction] = useState('');
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
 
   const handleNicknameChange = (text: string) => {
     setNickname(text);
@@ -29,8 +31,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
   const handleBirthYearChange = (text: string) => {
     setBirthYear(text);
     if (text.trim().length === 4 && /^\d+$/.test(text)) {
-      const randomJoke = birthYearJokes[Math.floor(Math.random() * birthYearJokes.length)];
-      setBirthYearReaction(randomJoke);
+      setBirthYearReaction(getBirthYearJoke(parseInt(text, 10)));
     } else {
       setBirthYearReaction('');
     }
@@ -56,6 +57,15 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
             <View style={styles.disclaimerBox}>
               <ThemedText style={styles.disclaimerText}>
                 This game contains explicit language, harsh feedback, and sarcasm. Your eyes and feelings may be violated.
+              </ThemedText>
+            </View>
+
+            <View style={styles.detailsBox}>
+              <ThemedText type="defaultSemiBold" style={styles.detailsTitle}>
+                Privacy Disclaimer:
+              </ThemedText>
+              <ThemedText style={styles.bulletText}>
+                We don't need your camera, mic, or gallery access. We just need your freaking creative brain, you doom-scrolling zombie.
               </ThemedText>
             </View>
 
@@ -118,7 +128,13 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
                 Your Nickname
               </ThemedText>
               <TextInput
-                style={styles.input}
+                style={[
+                  styles.input,
+                  {
+                    color: isDark ? '#fff' : '#000',
+                    backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
+                  },
+                ]}
                 placeholder="Enter your nickname..."
                 placeholderTextColor="#999"
                 value={nickname}
@@ -134,7 +150,13 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
                 Birth Year
               </ThemedText>
               <TextInput
-                style={styles.input}
+                style={[
+                  styles.input,
+                  {
+                    color: isDark ? '#fff' : '#000',
+                    backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
+                  },
+                ]}
                 placeholder="YYYY"
                 placeholderTextColor="#999"
                 value={birthYear}
