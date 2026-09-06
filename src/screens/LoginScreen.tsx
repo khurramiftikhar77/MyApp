@@ -135,7 +135,7 @@ export function LoginScreen({ onLogin, isEditing = false, initialNickname = '', 
               onChangeText={handleNicknameChange}
             />
             {nicknameReaction && (
-              <ThemedText style={styles.reaction}>{nicknameReaction}</ThemedText>
+              <ThemedText style={styles.reactionNickname}>💬 {nicknameReaction}</ThemedText>
             )}
           </View>
 
@@ -153,7 +153,7 @@ export function LoginScreen({ onLogin, isEditing = false, initialNickname = '', 
               maxLength={4}
             />
             {birthYearReaction && (
-              <ThemedText style={styles.reactionBold}>{birthYearReaction}</ThemedText>
+              <ThemedText style={styles.reactionBirthYear}>🎉 {birthYearReaction}</ThemedText>
             )}
             {ageBlockMessage && (
               <View style={styles.blockBox}>
@@ -176,7 +176,7 @@ export function LoginScreen({ onLogin, isEditing = false, initialNickname = '', 
               maxLength={3}
             />
             {weightReaction && (
-              <ThemedText style={styles.reaction}>{weightReaction}</ThemedText>
+              <ThemedText style={styles.reactionWeight}>⚡ {weightReaction}</ThemedText>
             )}
           </View>
 
@@ -207,7 +207,7 @@ export function LoginScreen({ onLogin, isEditing = false, initialNickname = '', 
               </TouchableOpacity>
             </View>
             {normalHumanReaction && (
-              <ThemedText style={styles.reaction}>{normalHumanReaction}</ThemedText>
+              <ThemedText style={styles.reactionNormalHuman}>✨ {normalHumanReaction}</ThemedText>
             )}
           </View>
 
@@ -284,17 +284,49 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 8,
   },
-  reaction: {
-    fontSize: 13,
-    fontStyle: 'italic',
-    color: '#666',
-    marginTop: 4,
+  reactionNickname: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: '#8A2BE2',
+    backgroundColor: 'rgba(138, 43, 226, 0.12)',
+    marginTop: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    overflow: 'hidden',
   },
-  reactionBold: {
-    fontSize: 13,
-    fontStyle: 'italic',
-    fontWeight: '600',
-    marginTop: 4,
+  reactionBirthYear: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: '#E8590C',
+    backgroundColor: 'rgba(255, 107, 53, 0.14)',
+    marginTop: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  reactionWeight: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: '#00897B',
+    backgroundColor: 'rgba(0, 137, 123, 0.12)',
+    marginTop: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  reactionNormalHuman: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: '#D6006B',
+    backgroundColor: 'rgba(214, 0, 107, 0.12)',
+    marginTop: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    overflow: 'hidden',
   },
   blockBox: {
     marginTop: 10,
