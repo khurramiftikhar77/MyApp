@@ -1,9 +1,9 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { UserHeader } from '@/components/user-header';
-import { PuzzleType } from '@/types/game';
+import { isReflectivePuzzleType, PuzzleType } from '@/types/game';
 import { useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 
 interface PuzzleSelectScreenProps {
   onSelectType: (type: PuzzleType) => void;
@@ -12,69 +12,86 @@ interface PuzzleSelectScreenProps {
   onEditProfile: () => void;
 }
 
+interface CategoryMeta {
+  type: PuzzleType;
+  emoji: string;
+  label: string;
+  desc: string;
+  color: string;
+}
+
+const CATEGORIES: CategoryMeta[] = [
+  { type: 'math', emoji: '🧮', label: 'Math', desc: 'Numbers, patterns, and sneaky logic', color: '#007AFF' },
+  { type: 'word', emoji: '🧩', label: 'Word', desc: 'Riddles and brain teasers', color: '#50C878' },
+  { type: 'philosophy', emoji: '🧘', label: 'Philosophy', desc: 'Existential questions. No right answers.', color: '#8A2BE2' },
+  { type: 'socialmedia', emoji: '📱', label: 'Social Media', desc: 'A brutally honest mirror', color: '#E91E63' },
+  { type: 'ai', emoji: '🤖', label: 'AI Literacy', desc: 'Agentic AI, LLMs, and you', color: '#00897B' },
+];
+
 export function PuzzleSelectScreen({ onSelectType, onViewHistory, userName, onEditProfile }: PuzzleSelectScreenProps) {
   const [selectedType, setSelectedType] = useState<PuzzleType>('math');
+  const selected = CATEGORIES.find((c) => c.type === selectedType)!;
+  const reflective = isReflectivePuzzleType(selectedType);
 
   return (
     <ThemedView style={styles.container}>
-      <View style={styles.content}>
-        <UserHeader name={userName} onEdit={onEditProfile} />
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.content}>
+          <UserHeader name={userName} onEdit={onEditProfile} />
 
-        <ThemedText type="title" style={styles.heading}>
-          🎯 Choose Puzzle Type
-        </ThemedText>
-        <ThemedText type="subtitle" style={styles.subheading}>
-          You need 3 correct answers out of 5 to win!
-        </ThemedText>
+          <ThemedText type="title" style={styles.heading}>
+            🎯 Choose Your Puzzle
+          </ThemedText>
+          <ThemedText type="subtitle" style={styles.subheading}>
+            {reflective ? 'No right or wrong here. Just be honest.' : 'You need 3 correct answers out of 5 to win!'}
+          </ThemedText>
 
-        <View style={styles.toggleTrack}>
+          <View style={styles.categoryList}>
+            {CATEGORIES.map((category) => {
+              const isActive = category.type === selectedType;
+              return (
+                <TouchableOpacity
+                  key={category.type}
+                  style={[
+                    styles.categoryCard,
+                    isActive && { borderColor: category.color, backgroundColor: `${category.color}1A` },
+                  ]}
+                  onPress={() => setSelectedType(category.type)}
+                >
+                  <ThemedText style={styles.categoryEmoji}>{category.emoji}</ThemedText>
+                  <View style={styles.categoryTextWrap}>
+                    <ThemedText
+                      type="defaultSemiBold"
+                      style={[styles.categoryLabel, isActive && { color: category.color }]}
+                    >
+                      {category.label}
+                    </ThemedText>
+                    <ThemedText style={styles.categoryDesc}>{category.desc}</ThemedText>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+
           <TouchableOpacity
-            style={[styles.toggleOption, selectedType === 'math' && styles.toggleOptionActiveMath]}
-            onPress={() => setSelectedType('math')}
+            style={[styles.startButton, { backgroundColor: selected.color }]}
+            onPress={() => onSelectType(selectedType)}
           >
-            <ThemedText
-              type="defaultSemiBold"
-              style={[styles.toggleText, selectedType === 'math' && styles.toggleTextActive]}
-            >
-              🧮 Math
+            <ThemedText type="defaultSemiBold" style={styles.startButtonText}>
+              🚀 Start Game →
             </ThemedText>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.toggleOption, selectedType === 'word' && styles.toggleOptionActiveWord]}
-            onPress={() => setSelectedType('word')}
+            style={styles.historyButton}
+            onPress={onViewHistory}
           >
-            <ThemedText
-              type="defaultSemiBold"
-              style={[styles.toggleText, selectedType === 'word' && styles.toggleTextActive]}
-            >
-              📝 Word
+            <ThemedText style={styles.historyButtonText}>
+              📊 My History
             </ThemedText>
           </TouchableOpacity>
         </View>
-
-        <ThemedText style={styles.typeDesc}>
-          {selectedType === 'math' ? '🔢 Numbers, patterns, and sneaky logic' : '🧩 Riddles and brain teasers'}
-        </ThemedText>
-
-        <TouchableOpacity
-          style={[styles.startButton, selectedType === 'word' && styles.startButtonWord]}
-          onPress={() => onSelectType(selectedType)}
-        >
-          <ThemedText type="defaultSemiBold" style={styles.startButtonText}>
-            🚀 Start Game →
-          </ThemedText>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.historyButton}
-          onPress={onViewHistory}
-        >
-          <ThemedText style={styles.historyButtonText}>
-            📊 My History
-          </ThemedText>
-        </TouchableOpacity>
-      </View>
+      </ScrollView>
     </ThemedView>
   );
 }
@@ -82,13 +99,16 @@ export function PuzzleSelectScreen({ onSelectType, onViewHistory, userName, onEd
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+  },
+  scrollContent: {
+    flexGrow: 1,
     alignItems: 'center',
+    justifyContent: 'center',
     padding: 20,
   },
   content: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: 420,
     alignItems: 'center',
   },
   heading: {
@@ -98,58 +118,42 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   subheading: {
-    marginBottom: 32,
+    marginBottom: 24,
     textAlign: 'center',
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
   },
-  toggleTrack: {
-    flexDirection: 'row',
+  categoryList: {
     width: '100%',
-    backgroundColor: 'rgba(0, 122, 255, 0.08)',
-    borderRadius: 16,
-    padding: 6,
-    gap: 6,
+    gap: 10,
+    marginBottom: 24,
   },
-  toggleOption: {
-    flex: 1,
-    paddingVertical: 16,
-    borderRadius: 12,
+  categoryCard: {
+    flexDirection: 'row',
     alignItems: 'center',
+    gap: 14,
+    width: '100%',
+    borderWidth: 2,
+    borderColor: 'rgba(128, 128, 128, 0.2)',
+    borderRadius: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
   },
-  toggleOptionActiveMath: {
-    backgroundColor: '#007AFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 3,
+  categoryEmoji: {
+    fontSize: 28,
   },
-  toggleOptionActiveWord: {
-    backgroundColor: '#50C878',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 3,
+  categoryTextWrap: {
+    flex: 1,
   },
-  toggleText: {
-    fontSize: 17,
-    opacity: 0.6,
+  categoryLabel: {
+    fontSize: 16,
+    marginBottom: 2,
   },
-  toggleTextActive: {
-    color: 'white',
-    opacity: 1,
-  },
-  typeDesc: {
-    marginTop: 16,
-    marginBottom: 28,
-    textAlign: 'center',
-    fontSize: 14,
+  categoryDesc: {
+    fontSize: 12,
     opacity: 0.7,
   },
   startButton: {
-    backgroundColor: '#007AFF',
     paddingVertical: 18,
     paddingHorizontal: 20,
     borderRadius: 14,
@@ -161,16 +165,13 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 5,
   },
-  startButtonWord: {
-    backgroundColor: '#50C878',
-  },
   startButtonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: '700',
   },
   historyButton: {
-    marginTop: 24,
+    marginTop: 20,
     paddingVertical: 12,
     paddingHorizontal: 30,
   },

@@ -18,6 +18,7 @@ interface ResultsScreenProps {
   totalQuestions: number;
   message: string;
   isWin: boolean;
+  isReflective?: boolean;
   ageGroup: AgeGroup;
   answers: AnsweredQuestion[];
   userName: string;
@@ -31,6 +32,7 @@ export function ResultsScreen({
   totalQuestions,
   message,
   isWin,
+  isReflective = false,
   ageGroup,
   answers,
   userName,
@@ -38,31 +40,40 @@ export function ResultsScreen({
   onBackHome,
   onEditProfile,
 }: ResultsScreenProps) {
-  const fortuneMessage = getFortuneMessage(ageGroup, isWin);
+  const fortuneMessage = isReflective ? null : getFortuneMessage(ageGroup, isWin);
 
   return (
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
         <UserHeader name={userName} onEdit={onEditProfile} />
 
-        <View style={[styles.resultContainer, isWin && styles.winContainer]}>
+        <View style={[styles.resultContainer, isWin && styles.winContainer, isReflective && styles.reflectiveContainer]}>
           <ThemedText type="title" style={styles.resultTitle}>
-            {isWin ? '🎉 WINNER! 🎉' : '😅 Game Over'}
+            {isReflective ? '🪞 Reflection Complete' : isWin ? '🎉 WINNER! 🎉' : '😅 Game Over'}
           </ThemedText>
 
-          <View style={styles.scoreBox}>
-            <ThemedText type="subtitle" style={styles.scoreText}>
-              {correctCount} / {totalQuestions} Correct
-            </ThemedText>
-          </View>
+          {!isReflective && (
+            <View style={styles.scoreBox}>
+              <ThemedText type="subtitle" style={styles.scoreText}>
+                {correctCount} / {totalQuestions} Correct
+              </ThemedText>
+            </View>
+          )}
 
-          <View style={[styles.messageBox, isWin ? styles.messageBoxWin : styles.messageBoxLose]}>
+          <View
+            style={[
+              styles.messageBox,
+              isReflective ? styles.messageBoxReflective : isWin ? styles.messageBoxWin : styles.messageBoxLose,
+            ]}
+          >
             <ThemedText style={styles.messageText}>{message}</ThemedText>
           </View>
 
-          <View style={styles.fortuneBox}>
-            <ThemedText style={styles.fortuneMessage}>{fortuneMessage}</ThemedText>
-          </View>
+          {fortuneMessage && (
+            <View style={styles.fortuneBox}>
+              <ThemedText style={styles.fortuneMessage}>{fortuneMessage}</ThemedText>
+            </View>
+          )}
 
           <View style={styles.screenshotBox}>
             <ThemedText style={styles.screenshotText}>
@@ -78,15 +89,22 @@ export function ResultsScreen({
           {answers.map((answer, index) => (
             <View
               key={index}
-              style={[styles.reviewItem, answer.isCorrect ? styles.reviewItemCorrect : styles.reviewItemWrong]}
+              style={[
+                styles.reviewItem,
+                isReflective
+                  ? styles.reviewItemReflective
+                  : answer.isCorrect
+                  ? styles.reviewItemCorrect
+                  : styles.reviewItemWrong,
+              ]}
             >
               <ThemedText style={styles.reviewQuestion}>
                 {index + 1}. {answer.question}
               </ThemedText>
               <ThemedText style={styles.reviewAnswer}>
-                {answer.isCorrect ? '✅' : '❌'} Your answer: {answer.userAnswer || '(no answer)'}
+                {isReflective ? '💭' : answer.isCorrect ? '✅' : '❌'} Your answer: {answer.userAnswer || '(no answer)'}
               </ThemedText>
-              {!answer.isCorrect && (
+              {!isReflective && !answer.isCorrect && (
                 <ThemedText style={styles.reviewCorrectAnswer}>
                   Correct answer: {answer.correctAnswer}
                 </ThemedText>
@@ -149,6 +167,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(80, 200, 120, 0.15)',
     borderColor: 'rgba(80, 200, 120, 0.4)',
   },
+  reflectiveContainer: {
+    backgroundColor: 'rgba(138, 43, 226, 0.1)',
+    borderColor: 'rgba(138, 43, 226, 0.3)',
+  },
   resultTitle: {
     marginBottom: 20,
     textAlign: 'center',
@@ -183,6 +205,10 @@ const styles = StyleSheet.create({
   messageBoxLose: {
     backgroundColor: 'rgba(255, 107, 107, 0.15)',
     borderLeftColor: '#FF6B6B',
+  },
+  messageBoxReflective: {
+    backgroundColor: 'rgba(138, 43, 226, 0.15)',
+    borderLeftColor: '#8A2BE2',
   },
   messageText: {
     textAlign: 'center',
@@ -242,6 +268,10 @@ const styles = StyleSheet.create({
   reviewItemWrong: {
     backgroundColor: 'rgba(255, 107, 107, 0.1)',
     borderLeftColor: '#FF6B6B',
+  },
+  reviewItemReflective: {
+    backgroundColor: 'rgba(138, 43, 226, 0.08)',
+    borderLeftColor: '#8A2BE2',
   },
   reviewQuestion: {
     fontSize: 14,

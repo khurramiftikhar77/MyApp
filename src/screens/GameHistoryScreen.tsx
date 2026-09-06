@@ -1,6 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { UserHeader } from '@/components/user-header';
+import { isReflectivePuzzleType, PuzzleType } from '@/types/game';
 import { GameHistoryEntry, getGameHistory } from '@/utils/userStorage';
 import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -10,6 +11,14 @@ interface GameHistoryScreenProps {
   onBack: () => void;
   onEditProfile: () => void;
 }
+
+const CATEGORY_META: Record<PuzzleType, { emoji: string; label: string }> = {
+  math: { emoji: '🧮', label: 'Math' },
+  word: { emoji: '🧩', label: 'Word' },
+  philosophy: { emoji: '🧘', label: 'Philosophy' },
+  socialmedia: { emoji: '📱', label: 'Social Media' },
+  ai: { emoji: '🤖', label: 'AI Literacy' },
+};
 
 export function GameHistoryScreen({ userName, onBack, onEditProfile }: GameHistoryScreenProps) {
   const [history, setHistory] = useState<GameHistoryEntry[] | null>(null);
@@ -24,8 +33,9 @@ export function GameHistoryScreen({ userName, onBack, onEditProfile }: GameHisto
     };
   }, []);
 
-  const wins = history?.filter((entry) => entry.won).length ?? 0;
-  const losses = (history?.length ?? 0) - wins;
+  const scoredGames = history?.filter((entry) => !isReflectivePuzzleType(entry.puzzleType)) ?? [];
+  const wins = scoredGames.filter((entry) => entry.won).length;
+  const losses = scoredGames.length - wins;
 
   return (
     <ThemedView style={styles.container}>
@@ -55,27 +65,37 @@ export function GameHistoryScreen({ userName, onBack, onEditProfile }: GameHisto
           </ThemedText>
         ) : (
           <View style={styles.list}>
-            {history.map((entry) => (
-              <View
-                key={entry.id}
-                style={[styles.entryRow, entry.won ? styles.entryRowWin : styles.entryRowLoss]}
-              >
-                <ThemedText style={styles.entryEmoji}>
-                  {entry.puzzleType === 'math' ? '🧮' : '🧩'}
-                </ThemedText>
-                <View style={styles.entryDetails}>
-                  <ThemedText style={styles.entryTitle}>
-                    {entry.puzzleType === 'math' ? 'Math' : 'Word'} Puzzle · {entry.correctCount}/{entry.totalQuestions}
-                  </ThemedText>
-                  <ThemedText style={styles.entryDate}>
-                    {new Date(entry.date).toLocaleDateString()} · {new Date(entry.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            {history.map((entry) => {
+              const reflective = isReflectivePuzzleType(entry.puzzleType);
+              const meta = CATEGORY_META[entry.puzzleType];
+              return (
+                <View
+                  key={entry.id}
+                  style={[
+                    styles.entryRow,
+                    reflective ? styles.entryRowReflective : entry.won ? styles.entryRowWin : styles.entryRowLoss,
+                  ]}
+                >
+                  <ThemedText style={styles.entryEmoji}>{meta.emoji}</ThemedText>
+                  <View style={styles.entryDetails}>
+                    <ThemedText style={styles.entryTitle}>
+                      {meta.label} {reflective ? 'Reflection' : `Puzzle · ${entry.correctCount}/${entry.totalQuestions}`}
+                    </ThemedText>
+                    <ThemedText style={styles.entryDate}>
+                      {new Date(entry.date).toLocaleDateString()} · {new Date(entry.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </ThemedText>
+                  </View>
+                  <ThemedText
+                    style={[
+                      styles.entryBadge,
+                      reflective ? styles.entryBadgeReflective : entry.won ? styles.entryBadgeWin : styles.entryBadgeLoss,
+                    ]}
+                  >
+                    {reflective ? 'DONE' : entry.won ? 'WON' : 'LOST'}
                   </ThemedText>
                 </View>
-                <ThemedText style={[styles.entryBadge, entry.won ? styles.entryBadgeWin : styles.entryBadgeLoss]}>
-                  {entry.won ? 'WON' : 'LOST'}
-                </ThemedText>
-              </View>
-            ))}
+              );
+            })}
           </View>
         )}
 
@@ -164,6 +184,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 107, 107, 0.1)',
     borderLeftColor: '#FF6B6B',
   },
+  entryRowReflective: {
+    backgroundColor: 'rgba(138, 43, 226, 0.08)',
+    borderLeftColor: '#8A2BE2',
+  },
   entryEmoji: {
     fontSize: 22,
   },
@@ -193,6 +217,10 @@ const styles = StyleSheet.create({
   },
   entryBadgeLoss: {
     backgroundColor: '#FF6B6B',
+    color: 'white',
+  },
+  entryBadgeReflective: {
+    backgroundColor: '#8A2BE2',
     color: 'white',
   },
   backButton: {

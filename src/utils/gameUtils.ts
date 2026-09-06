@@ -5,17 +5,27 @@ import {
     over18FortunePraise,
     over18InsultMessages,
     over18WrongFeedback,
+    philosophyClosingMessages,
+    socialMediaClosingMessages,
     under18CongratulationMessages,
     under18CorrectFeedback,
     under18FortuneTeller,
     under18InsultMessages,
     under18WrongFeedback,
 } from '@/data/messages';
-import { mathPuzzles, wordPuzzles } from '@/data/puzzles';
-import { AgeGroup, Puzzle } from '@/types/game';
+import { aiPuzzles, mathPuzzles, philosophyPuzzles, socialMediaPuzzles, wordPuzzles } from '@/data/puzzles';
+import { AgeGroup, Puzzle, PuzzleType } from '@/types/game';
 
-export function getRandomPuzzles(type: 'math' | 'word', count: number = 5): Puzzle[] {
-  const puzzles = type === 'math' ? mathPuzzles : wordPuzzles;
+const PUZZLE_POOLS: Record<PuzzleType, Puzzle[]> = {
+  math: mathPuzzles,
+  word: wordPuzzles,
+  philosophy: philosophyPuzzles,
+  socialmedia: socialMediaPuzzles,
+  ai: aiPuzzles,
+};
+
+export function getRandomPuzzles(type: PuzzleType, count: number = 5): Puzzle[] {
+  const puzzles = PUZZLE_POOLS[type];
   const shuffled = [...puzzles].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, count);
 }
@@ -90,4 +100,11 @@ export function getFortuneMessage(ageGroup: AgeGroup, won: boolean): string {
   }
 
   return under18FortuneTeller[Math.floor(Math.random() * under18FortuneTeller.length)];
+}
+
+// Closing message for reflective categories (philosophy, social media) -
+// there's no win/loss, just one closing line shown regardless of answers.
+export function getReflectiveClosingMessage(type: PuzzleType): string {
+  const pool = type === 'philosophy' ? philosophyClosingMessages : socialMediaClosingMessages;
+  return pool[Math.floor(Math.random() * pool.length)];
 }

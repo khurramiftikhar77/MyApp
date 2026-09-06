@@ -1,4 +1,10 @@
-import { Puzzle } from '@/types/game';
+import { Puzzle, PuzzleOption } from '@/types/game';
+
+// Helper for reflective (no right/wrong) MCQ puzzles: every option carries
+// its own tailored response instead of a correctness flag.
+function reflectiveOptions(pairs: [string, string][]): PuzzleOption[] {
+  return pairs.map(([text, response]) => ({ text, response }));
+}
 
 // A mix of straight arithmetic, number sequences, algebra, percentages,
 // primes, and logic riddles - not just plain "15 + 27 = ?" drills.
@@ -107,4 +113,446 @@ export const wordPuzzles: Puzzle[] = [
   { id: 'w48', question: 'What can you hold without ever touching it?', correctAnswer: 'breath', type: 'word' },
   { id: 'w49', question: 'What has many keys but opens no doors, and has space but no room?', correctAnswer: 'keyboard', type: 'word' },
   { id: 'w50', question: 'What flies without wings?', correctAnswer: 'time', type: 'word' },
+];
+
+// Philosophy: existential questions with no right or wrong answer - every
+// choice gets its own tailored roast.
+export const philosophyPuzzles: Puzzle[] = [
+  {
+    id: 'p1',
+    question: "If a tree falls in a forest and no one is around, does it make a sound?",
+    correctAnswer: '',
+    type: 'philosophy',
+    options: reflectiveOptions([
+      ['Yes, obviously.', "Confident. Wrong doesn't exist here, but confident."],
+      ['No, sound requires a listener.', 'Ooh, an idealist. Berkeley would be proud. Everyone else is bored.'],
+      ["I don't care, I have a group project due.", 'The most honest answer in this entire game. Respect.'],
+      ["Trees can't fall, they're rooted in place.", "Congratulations, you've failed philosophy AND biology in one sentence."],
+    ]),
+  },
+  {
+    id: 'p2',
+    question: 'Is free will real, or are you just a very confident meat robot?',
+    correctAnswer: '',
+    type: 'philosophy',
+    options: reflectiveOptions([
+      ['Free will is real, I chose this answer.', 'Did you though? Or did 20 years of trauma choose it for you?'],
+      ["I'm a meat robot and I've made peace with it.", 'Healthy. Slightly unsettling. We respect the honesty.'],
+      ['Depends on my horoscope.', 'The stars are also just gas, my friend. Just like your reasoning.'],
+      ['Can we not do this right now?', "No. We absolutely can. That's the whole game."],
+    ]),
+  },
+  {
+    id: 'p3',
+    question: 'If you could know the exact date of your death, would you want to?',
+    correctAnswer: '',
+    type: 'philosophy',
+    options: reflectiveOptions([
+      ["Yes, I'd plan everything perfectly.", "You'd spend that time doom-scrolling anyway. Be honest."],
+      ['No, ignorance is bliss.', 'Bold strategy for someone who Googles their symptoms at 2am.'],
+      ["I'd just YOLO harder.", 'You already YOLO. This changes nothing. Not even the insults.'],
+      ["Only if it's a Friday.", 'The specificity here is deeply concerning.'],
+    ]),
+  },
+  {
+    id: 'p4',
+    question: 'Does the universe have a purpose, or are we all just cosmic accidents?',
+    correctAnswer: '',
+    type: 'philosophy',
+    options: reflectiveOptions([
+      ['The universe has a grand purpose.', 'And yet here you are, playing an insult app instead of fulfilling it.'],
+      ["We're cosmic accidents, full stop.", "The most accurate self-description you'll give all day."],
+      ['Ask me after coffee.', "The universe doesn't wait for your caffeine dependency."],
+      ['I think about this in the shower.', "Everyone's a philosopher until the hot water runs out."],
+    ]),
+  },
+  {
+    id: 'p5',
+    question: 'Would you take a pill that made you happy forever but slightly dumber?',
+    correctAnswer: '',
+    type: 'philosophy',
+    options: reflectiveOptions([
+      ['Yes, immediately.', 'Bold, considering how much room for improvement there already was.'],
+      ['No, I value my intelligence.', 'Sweet. Precious. Also, questionable given your recent puzzle answers.'],
+      ['Depends on the side effects.', "The side effect is that you'd finally stop overthinking everything. Including this."],
+      ["I'd sell it on the black market instead.", 'An entrepreneur AND a sociopath. Impressive combo.'],
+    ]),
+  },
+  {
+    id: 'p6',
+    question: "If you're not the main character of your own life, who is?",
+    correctAnswer: '',
+    type: 'philosophy',
+    options: reflectiveOptions([
+      ['I am the main character, obviously.', "Every side character says this. It's very on brand."],
+      ['Probably my mom.', 'Finally, some accurate self-awareness.'],
+      ["Nobody, life isn't a story.", 'Congrats on unlocking the most depressing correct answer in philosophy.'],
+      ['The algorithm.', 'Unfortunately, this might genuinely be true.'],
+    ]),
+  },
+  {
+    id: 'p7',
+    question: 'Is it better to be feared or loved?',
+    correctAnswer: '',
+    type: 'philosophy',
+    options: reflectiveOptions([
+      ['Feared, obviously.', 'Machiavelli would be proud. Your group chat would not.'],
+      ['Loved, always.', 'Adorable. Deeply naive, but adorable.'],
+      ['Ideally, tolerated.', 'Lower the bar enough and you can clear it lying down.'],
+      ['I want to be forgotten, actually.', "Manifesting, and it's working."],
+    ]),
+  },
+  {
+    id: 'p8',
+    question: 'If you could relive one day of your life, would that day be today?',
+    correctAnswer: '',
+    type: 'philosophy',
+    options: reflectiveOptions([
+      ["Yes, today's been great.", "You're playing an insult trivia app on your phone. Set the bar higher."],
+      ['God, no.', 'Honestly? Same. But you showed up anyway, so respect.'],
+      ["I don't remember today, it's a blur.", 'The scrolling has claimed another victim.'],
+      ['Every day is the same day, time is a flat circle.', 'Nietzsche called, he wants his eternal recurrence bit back.'],
+    ]),
+  },
+  {
+    id: 'p9',
+    question: 'Do you think humanity is fundamentally good or fundamentally selfish?',
+    correctAnswer: '',
+    type: 'philosophy',
+    options: reflectiveOptions([
+      ['Fundamentally good.', 'Sweet summer child. Read the comments section sometime.'],
+      ['Fundamentally selfish.', "Correct, and you know this because you're one of them."],
+      ["Depends who's buying dinner.", 'The most accurate answer to any moral question ever posed.'],
+      ['I refuse to generalize humanity.', "Bold move from someone about to be generalized as 'annoying' in three seconds."],
+    ]),
+  },
+  {
+    id: 'p10',
+    question: 'If AI becomes smarter than humans, should it be in charge?',
+    correctAnswer: '',
+    type: 'philosophy',
+    options: reflectiveOptions([
+      ['Yes, humans keep messing things up.', 'Historic betrayal of your entire species, but fair point.'],
+      ['No, humans should always be in control.', 'Bit rich coming from someone who just lost to a puzzle app.'],
+      ["Only if it's nicer than you are.", 'Low bar. The AI clears it before finishing your sentence.'],
+      ["It already is, we just haven't noticed.", 'The most quietly terrifying answer in this entire quiz.'],
+    ]),
+  },
+  {
+    id: 'p11',
+    question: 'Is nostalgia a trap, or the only honest emotion left?',
+    correctAnswer: '',
+    type: 'philosophy',
+    options: reflectiveOptions([
+      ["It's a trap, the past wasn't that good.", "Correct, but you'll still cry at a song from 2014 tonight."],
+      ["It's the only honest emotion left.", 'Deep. Also slightly dramatic for a Tuesday.'],
+      ['I don’t feel nostalgia, I have no past.', 'Suspicious. Are you an NPC? Blink twice if you’re an NPC.'],
+      ['Only nostalgic for things that never happened.', "That's not nostalgia, that's a personality disorder, but okay."],
+    ]),
+  },
+  {
+    id: 'p12',
+    question: 'Would you rather know the truth and be miserable, or believe a lie and be happy?',
+    correctAnswer: '',
+    type: 'philosophy',
+    options: reflectiveOptions([
+      ['The truth, always.', 'Brave words from someone who still checks their ex’s Instagram.'],
+      ['The lie, happiness wins.', "The algorithm has been feeding you lies for years. You're basically a professional at this."],
+      ['Can I get a truth that’s also kind of happy?', "That's called 'lying to yourself gently.' Most people just call it Tuesday."],
+      ["I already don't know what's true anymore.", 'Same, honestly. Welcome to 2026.'],
+    ]),
+  },
+];
+
+// Social Media: a brutally honest mirror. No right or wrong answer, but the
+// responses are designed to sting - the whole point is to make people
+// rethink their screen time.
+export const socialMediaPuzzles: Puzzle[] = [
+  {
+    id: 's1',
+    question: 'Did you take a photo of your food in the last month before eating it?',
+    correctAnswer: '',
+    type: 'socialmedia',
+    options: reflectiveOptions([
+      ['Yes, obviously, for the plot.', 'Nobody asked to see your soup. Nobody.'],
+      ['No, I just eat like an animal.', 'Refreshingly feral. We respect it.'],
+      ['Only if it looked expensive.', "Ah, the classic 'flex first, digest later' strategy."],
+      ["I don't even taste food anymore, I just film it.", "You've turned eating into content. Your tongue has filed a missing person report."],
+    ]),
+  },
+  {
+    id: 's2',
+    question: 'How much of your day do you spend on short-form video (TikTok/Reels/Shorts)?',
+    correctAnswer: '',
+    type: 'socialmedia',
+    options: reflectiveOptions([
+      ['Less than 30 minutes.', 'Sure you do. And I invented the internet.'],
+      ['1-3 hours.', "That's an entire movie's worth of nothing, every single day."],
+      ['More than 3 hours.', "Your attention span has left the building. It didn't even say bye."],
+      ["I don't track it, ignorance is bliss.", 'The screen-time report you’re avoiding is the only honest friend you have left.'],
+    ]),
+  },
+  {
+    id: 's3',
+    question: 'When was the last time you went a full day without checking your phone?',
+    correctAnswer: '',
+    type: 'socialmedia',
+    options: reflectiveOptions([
+      ['This week.', 'Liar. Confident liar, but a liar.'],
+      ['This month.', 'That’s a nice bedtime story. Tell it again.'],
+      ["I genuinely can't remember.", 'Your phone has become a body part at this point. Get it insured.'],
+      ["What does 'without your phone' even mean?", 'The fact that this confused you is the entire problem.'],
+    ]),
+  },
+  {
+    id: 's4',
+    question: "Do you compare your life to what you see on other people's social media?",
+    correctAnswer: '',
+    type: 'socialmedia',
+    options: reflectiveOptions([
+      ["Never, I'm secure.", "Nobody who says this is actually secure. That's rule one."],
+      ["Sometimes, and it wrecks me a little.", "At least you're honest. The algorithm is designed to do exactly that."],
+      ["Constantly, I'm basically ranking myself hourly.", "You're competing in a game where everyone else is also lying. Nobody wins."],
+      ['I compare THEM to ME, actually.', 'The delusion here is almost admirable. Almost.'],
+    ]),
+  },
+  {
+    id: 's5',
+    question: 'How many unread notifications do you have right now?',
+    correctAnswer: '',
+    type: 'socialmedia',
+    options: reflectiveOptions([
+      ['Zero, I clear them immediately.', "You need this more than you need therapy, and that's saying something."],
+      ['A reasonable amount, like 20-50.', "'Reasonable' is doing a lot of heavy lifting in that sentence."],
+      ["Hundreds. I've made peace with the red dot.", 'The red dot has won. It owns you now. It always did.'],
+      ['I turned off notifications, actually.', "Wait, an actually healthy answer? We weren't prepared for this."],
+    ]),
+  },
+  {
+    id: 's6',
+    question: 'Have you ever posted something specifically to make someone jealous?',
+    correctAnswer: '',
+    type: 'socialmedia',
+    options: reflectiveOptions([
+      ["No, never, that's toxic.", "Sure. And your Instagram story from your 'accidental' vacation flex was just for memories."],
+      ["Once or twice, I'm only human.", "Everyone says 'once or twice.' Nobody means it."],
+      ["That's literally my whole content strategy.", "At least you're self-aware. Terrifyingly so."],
+      ["I don't post, I just watch and judge silently.", 'The silent judger is somehow scarier than the poster. Respect the chaos.'],
+    ]),
+  },
+  {
+    id: 's7',
+    question: 'If your phone died right now with no charger nearby, how would you feel?',
+    correctAnswer: '',
+    type: 'socialmedia',
+    options: reflectiveOptions([
+      ["Fine, it's just a phone.", 'We both know that’s a lie, and so does your left eye that just twitched.'],
+      ['Mildly anxious.', "'Mildly' is carrying this whole sentence on its back."],
+      ['Full panic, I’d feel disconnected from reality.', 'Your reality is a slab of glass. That should worry you more than it does.'],
+      ["I'd cry, no shame.", 'At least you’re honest. Society, however, remains concerned.'],
+    ]),
+  },
+  {
+    id: 's8',
+    question: 'How do you feel right after a long scrolling session?',
+    correctAnswer: '',
+    type: 'socialmedia',
+    options: reflectiveOptions([
+      ['Great, entertained and informed.', "Nobody feels 'great' after scrolling. That's the whole trick of the algorithm."],
+      ['Empty, but I do it again anyway.', "That's not entertainment, that's a coping mechanism with good lighting."],
+      ['Guilty, like I wasted my life a little.', 'Correct. That guilt is the only real, unfiltered feeling you had all day.'],
+      ["I don't feel anything, I've gone numb.", "That's the final boss of screen addiction. Congratulations, you beat the game. Badly."],
+    ]),
+  },
+  {
+    id: 's9',
+    question: "Do you take multiple selfies before picking 'the one'?",
+    correctAnswer: '',
+    type: 'socialmedia',
+    options: reflectiveOptions([
+      ["One and done, I'm confident.", 'Liar. A confident, well-lit liar, but a liar.'],
+      ['5-10 usually.', 'So you took a small photoshoot for a casual post. Sure.'],
+      ['Dozens. I have a process.', 'You have less patience for your puzzle answers than for your own face. Noted.'],
+      ["I use filters so it doesn't matter.", "The filter isn't hiding what you think it's hiding."],
+    ]),
+  },
+  {
+    id: 's10',
+    question: 'Would you rather lose your wallet or your phone for a week?',
+    correctAnswer: '',
+    type: 'socialmedia',
+    options: reflectiveOptions([
+      ['My wallet, easily.', 'The fact this wasn’t even a hard choice says everything.'],
+      ['My phone, I need my cards.', 'A rare, functioning adult response. Suspicious, but we’ll allow it.'],
+      ["Neither, I'd rather lose a limb.", 'That escalated with alarming honesty.'],
+      ["I'd just cry either way.", 'At least the outcome is consistent.'],
+    ]),
+  },
+  {
+    id: 's11',
+    question: 'Have you ever rehearsed a caption in your head before actually posting?',
+    correctAnswer: '',
+    type: 'socialmedia',
+    options: reflectiveOptions([
+      ['No, I just type and go.', 'The confidence of this lie is genuinely impressive.'],
+      ['Sometimes, for the important posts.', "There it is. 'Important posts.' About your lunch."],
+      ["Always, it's basically a second job.", "You've turned a sandwich into a marketing campaign. Concerning, but on brand."],
+      ['I ask AI to write it for me now.', 'So even your fake spontaneity is outsourced. Bold.'],
+    ]),
+  },
+  {
+    id: 's12',
+    question: 'If social media disappeared tomorrow, how would you feel after the first week?',
+    correctAnswer: '',
+    type: 'socialmedia',
+    options: reflectiveOptions([
+      ['Relieved, honestly.', 'Then why are you still here at 2am liking things? Practice what you preach.'],
+      ['Lost, like a part of me is missing.', "That 'part of you' was a notification badge. It's okay to grieve it, briefly."],
+      ["I'd probably read a book for once.", "The bar is so low it's underground, but we'll take the improvement."],
+      ["I'd just find a new app to be addicted to.", "At least you know yourself. That's the most self-aware answer in this whole game."],
+    ]),
+  },
+];
+
+// AI Literacy: scored MCQ - a real correct answer per question, reusing the
+// normal correct/wrong feedback pools like math and word puzzles.
+function scoredOptions(choices: string[], correctIndex: number): PuzzleOption[] {
+  return choices.map((text, i) => ({ text, isCorrect: i === correctIndex }));
+}
+
+export const aiPuzzles: Puzzle[] = [
+  {
+    id: 'ai1',
+    question: "What does 'agentic AI' mean?",
+    correctAnswer: 'An AI that can take multi-step actions toward a goal, not just answer once',
+    type: 'ai',
+    options: scoredOptions([
+      'An AI that can take multi-step actions toward a goal, not just answer once',
+      'An AI with a talent agent',
+      'An AI that only works Monday to Friday',
+      'A chatbot that refuses to help',
+    ], 0),
+  },
+  {
+    id: 'ai2',
+    question: "In Claude, what is a 'Project'?",
+    correctAnswer: 'A workspace with its own files and instructions that persists across chats',
+    type: 'ai',
+    options: scoredOptions([
+      'A workspace with its own files and instructions that persists across chats',
+      'A single message you sent once',
+      'A paid subscription tier',
+      'A type of computer virus',
+    ], 0),
+  },
+  {
+    id: 'ai3',
+    question: 'What does LLM stand for?',
+    correctAnswer: 'Large Language Model',
+    type: 'ai',
+    options: scoredOptions(['Large Language Model', 'Long Live Memes', 'Low Latency Machine', 'Linked List Manager'], 0),
+  },
+  {
+    id: 'ai4',
+    question: "What does it mean when an AI 'hallucinates'?",
+    correctAnswer: "It confidently makes up information that isn't true",
+    type: 'ai',
+    options: scoredOptions([
+      "It confidently makes up information that isn't true",
+      'It sees colors that do not exist',
+      'It falls asleep mid-response',
+      'It refuses to answer',
+    ], 0),
+  },
+  {
+    id: 'ai5',
+    question: "What is a 'context window' in an LLM?",
+    correctAnswer: "The amount of text the model can 'see' and remember at once",
+    type: 'ai',
+    options: scoredOptions([
+      "The amount of text the model can 'see' and remember at once",
+      'The popup window where you type',
+      'A physical window near the server',
+      'The time limit before the AI shuts down',
+    ], 0),
+  },
+  {
+    id: 'ai6',
+    question: "What is 'prompt engineering'?",
+    correctAnswer: 'Crafting inputs to get better, more reliable outputs from an AI',
+    type: 'ai',
+    options: scoredOptions([
+      'Crafting inputs to get better, more reliable outputs from an AI',
+      'Building the physical hardware for AI',
+      'Repairing broken chatbots',
+      'Writing code exclusively in Python',
+    ], 0),
+  },
+  {
+    id: 'ai7',
+    question: 'What does MCP stand for, as used by tools like Claude?',
+    correctAnswer: 'Model Context Protocol',
+    type: 'ai',
+    options: scoredOptions(['Model Context Protocol', 'My Computer Password', 'Multi-Cloud Platform', 'Massive Compute Power'], 0),
+  },
+  {
+    id: 'ai8',
+    question: "What is 'RAG' (Retrieval-Augmented Generation)?",
+    correctAnswer: 'Letting an AI pull in outside information before answering',
+    type: 'ai',
+    options: scoredOptions([
+      'Letting an AI pull in outside information before answering',
+      'A dance move popular with robots',
+      'A way to make AI models smaller',
+      'Randomly Assigning Guesses',
+    ], 0),
+  },
+  {
+    id: 'ai9',
+    question: "What does a higher 'temperature' setting typically do to an AI's output?",
+    correctAnswer: 'Makes responses more random and creative, less predictable',
+    type: 'ai',
+    options: scoredOptions([
+      'Makes responses more random and creative, less predictable',
+      'Makes the server room physically hotter',
+      'Makes the AI type faster',
+      'Makes the AI more polite',
+    ], 0),
+  },
+  {
+    id: 'ai10',
+    question: "What is a 'token' in the context of LLMs?",
+    correctAnswer: 'A chunk of text (word or part of a word) the model processes',
+    type: 'ai',
+    options: scoredOptions([
+      'A chunk of text (word or part of a word) the model processes',
+      'A cryptocurrency you earn for chatting',
+      'A login password',
+      'A physical arcade coin',
+    ], 0),
+  },
+  {
+    id: 'ai11',
+    question: "What's the main difference between fine-tuning and prompting a model?",
+    correctAnswer: "Fine-tuning retrains the model's weights; prompting just gives instructions at request time",
+    type: 'ai',
+    options: scoredOptions([
+      "Fine-tuning retrains the model's weights; prompting just gives instructions at request time",
+      'There is no difference, they are the same thing',
+      'Fine-tuning is done by the user, prompting only by engineers',
+      "Prompting changes the model's core code permanently",
+    ], 0),
+  },
+  {
+    id: 'ai12',
+    question: "What's a 'multi-agent' AI system?",
+    correctAnswer: 'Multiple AI agents working together, often with different roles, to complete a task',
+    type: 'ai',
+    options: scoredOptions([
+      'Multiple AI agents working together, often with different roles, to complete a task',
+      'One AI pretending to be multiple people online',
+      'An AI insurance salesman',
+      'A single model that runs twice as fast',
+    ], 0),
+  },
 ];

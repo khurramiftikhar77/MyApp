@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { UserHeader } from '@/components/user-header';
-import { AgeGroup, Puzzle } from '@/types/game';
+import { AgeGroup, isReflectivePuzzleType, Puzzle, PuzzleOption, PuzzleType } from '@/types/game';
 import { checkAnswer, getRandomMessage, pickUniqueMessage } from '@/utils/gameUtils';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -18,6 +18,12 @@ import {
 import { timeoutMessages } from '@/data/messages';
 
 const HURRY_UP_THRESHOLD = 10;
+
+// Word puzzles (and the new MCQ categories, which need reading time) get
+// longer than math, where answers are usually quick to type.
+function getInitialTime(type: PuzzleType): number {
+  return type === 'math' ? 20 : 30;
+}
 
 interface QuizScreenProps {
   puzzle: Puzzle;
@@ -43,14 +49,18 @@ export function QuizScreen({
   onEditProfile,
 }: QuizScreenProps) {
   const [userAnswer, setUserAnswer] = useState('');
+  const [selectedOptionText, setSelectedOptionText] = useState('');
   const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean; isTimeout?: boolean } | null>(null);
   const [showingFeedback, setShowingFeedback] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(20);
+  const initialTime = getInitialTime(puzzle.type);
+  const [timeRemaining, setTimeRemaining] = useState(initialTime);
   const [timedOut, setTimedOut] = useState(false);
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const usedFeedback = useRef(new Set<string>());
   const usedTimeouts = useRef(new Set<string>());
+  const isReflective = isReflectivePuzzleType(puzzle.type);
+  const isMcq = !!puzzle.options?.length;
 
   // Timer effect
   useEffect(() => {
@@ -92,13 +102,29 @@ export function QuizScreen({
     }
   };
 
+  const handleSelectOption = (option: PuzzleOption) => {
+    if (showingFeedback || timedOut) return;
+    setSelectedOptionText(option.text);
+    if (isReflective) {
+      setFeedback({ message: option.response || '', isCorrect: true });
+    } else {
+      const isCorrect = option.isCorrect === true;
+      const message = getRandomMessage(isCorrect, ageGroup, usedFeedback.current);
+      setFeedback({ message, isCorrect });
+    }
+    setShowingFeedback(true);
+  };
+
   const handleNext = () => {
-    onAnswer(userAnswer.trim(), timedOut ? false : feedback?.isCorrect || false, feedback?.message || '');
+    const answerText = isMcq ? selectedOptionText : userAnswer.trim();
+    const isCorrect = isReflective ? true : timedOut ? false : feedback?.isCorrect || false;
+    onAnswer(answerText, isCorrect, feedback?.message || '');
     setUserAnswer('');
+    setSelectedOptionText('');
     setFeedback(null);
     setShowingFeedback(false);
     setTimedOut(false);
-    setTimeRemaining(20);
+    setTimeRemaining(initialTime);
   };
 
   const isUrgent = timeRemaining <= HURRY_UP_THRESHOLD && timeRemaining > 0;
@@ -150,7 +176,7 @@ export function QuizScreen({
 
         <View style={styles.scoreContainer}>
           <ThemedText style={styles.score}>
-            ✓ Correct: {correctCount}/3
+            {isReflective ? `🪞 Reflecting: ${questionNumber}/${totalQuestions}` : `✓ Correct: ${correctCount}/3`}
           </ThemedText>
         </View>
 
@@ -164,13 +190,21 @@ export function QuizScreen({
           <View
             style={[
               styles.feedbackBox,
-              feedback.isCorrect && !feedback.isTimeout
+              isReflective
+                ? styles.feedbackReflective
+                : feedback.isCorrect && !feedback.isTimeout
                 ? styles.feedbackCorrect
                 : styles.feedbackWrong,
             ]}
           >
             <ThemedText style={styles.feedbackEmoji}>
-              {feedback.isTimeout ? '⏰ TIMEOUT!' : feedback.isCorrect ? '✅ CORRECT!' : '❌ WRONG!'}
+              {isReflective
+                ? '💭 NOTED.'
+                : feedback.isTimeout
+                ? '⏰ TIMEOUT!'
+                : feedback.isCorrect
+                ? '✅ CORRECT!'
+                : '❌ WRONG!'}
             </ThemedText>
             <ThemedText style={styles.feedbackMessage}>{feedback.message}</ThemedText>
             <TouchableOpacity
@@ -181,6 +215,19 @@ export function QuizScreen({
                 Next Question →
               </ThemedText>
             </TouchableOpacity>
+          </View>
+        ) : isMcq ? (
+          <View style={styles.optionsList}>
+            {puzzle.options!.map((option, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.optionButton}
+                onPress={() => handleSelectOption(option)}
+                disabled={showingFeedback || timedOut}
+              >
+                <ThemedText style={styles.optionButtonText}>{option.text}</ThemedText>
+              </TouchableOpacity>
+            ))}
           </View>
         ) : (
           <>
@@ -348,6 +395,27 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 107, 107, 0.2)',
     borderWidth: 2,
     borderColor: '#FF6B6B',
+  },
+  feedbackReflective: {
+    backgroundColor: 'rgba(138, 43, 226, 0.15)',
+    borderWidth: 2,
+    borderColor: '#8A2BE2',
+  },
+  optionsList: {
+    width: '100%',
+    gap: 10,
+  },
+  optionButton: {
+    borderWidth: 2,
+    borderColor: '#007AFF',
+    borderRadius: 10,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+  },
+  optionButtonText: {
+    fontSize: 15,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   feedbackEmoji: {
     fontSize: 28,

@@ -109,6 +109,79 @@ export const over18FortuneInsultExtra = [
 
 over18FortuneInsult.push(...over18FortuneInsultExtra);
 
+// More fortune teller PRAISE for a WIN (18+) - people noticed the pool was
+// small enough to repeat, so this brings it up to 25 total.
+export const over18FortunePraiseExtra2 = [
+  "🔮 The stars recalibrate: You beat five puzzles designed by a phone. This is either the beginning of a renaissance or a statistical fluke. Enjoy it either way.",
+  "🔮 A tired algorithm whispers respect: It expected you to fail. You didn't. It's updating its model of you as we speak.",
+  "🔮 The oracle checks twice: Yes, that was really you. No, it wasn't luck. Well, maybe a little luck.",
+  "🔮 Cosmic ledger update: Your name has been moved from 'probably fine' to 'actually pretty sharp.' Don't get used to it.",
+  "🔮 The void, begrudgingly impressed: You did the thing. The actual thing. With your actual brain. Weird era to be alive in.",
+  "🔮 The fates whisper a warning wrapped in a compliment: Keep this up and people might start expecting things from you.",
+  "🔮 Ancient wisdom nods slowly: Somewhere, a professor who gave up on group projects just felt a flicker of hope.",
+  "🔮 The prophecy updates in real time: You are now 4% more insufferable at trivia night. Use this power responsibly.",
+  "🔮 A digital seer consults the data: Your neurons fired in the correct order more than once. Frame this moment.",
+  "🔮 The spirits high-five, reluctantly: This wasn't supposed to happen and yet, here we are, applauding you.",
+  "🔮 The cosmic scoreboard ticks upward: Somewhere your worst critic just quietly deleted a comment.",
+  "🔮 Destiny, mildly stunned: You solved this faster than most people solve their own problems. Take the win.",
+  "🔮 The oracle allows herself a smile: Every generation gets one person who still tries. Today, it was you.",
+  "🔮 The universe files an updated report: Subject shows signs of independent thought. Recommend continued observation.",
+  "🔮 A skeptical machine spirit concedes: Fine. You're smarter than the average doomscroller. That's still something.",
+];
+
+over18FortunePraise.push(...over18FortunePraiseExtra2);
+
+// More fortune teller INSULT for a LOSS (18+) - same reasoning, brings the
+// insult pool up to 30 total so it stops feeling like the same 10 lines.
+export const over18FortuneInsultExtra2 = [
+  "🔮 The oracle checks her notes twice, just to be sure: Yep. You really did lose to a puzzle a phone generated in a fraction of a second.",
+  "🔮 A weary prophecy unfolds: Somewhere, a rock figured out fire before you figured out this question. Sit with that.",
+  "🔮 The cosmic ledger is updated, unfavorably: Your account has been flagged for 'concerning lack of critical thought.' No appeal process exists.",
+  "🔮 The spirits sigh in unison: This wasn't even the hard version. This was the version designed to be beatable. And yet.",
+  "🔮 Destiny shrugs, unbothered: The universe doesn't owe you a win just because you showed up. Neither does this app.",
+  "🔮 A tired algorithm speaks plainly: It's not that you're incapable. It's that you didn't try, and it shows in the data.",
+  "🔮 The void considers your performance and says nothing, because honestly, what is there to say.",
+  "🔮 Ancient wisdom, unimpressed: Every civilization that came before you built something. You lost to five questions on a Tuesday.",
+  "🔮 The fates recalculate the odds: They were in your favor. You found a way to lose anyway. Impressive, in a bad way.",
+  "🔮 The oracle closes her eyes, exhausted: This is the third time today someone has lost this exact puzzle set. You're not special. You're just slow.",
+  "🔮 A cosmic footnote is added to your file: 'Had every advantage. Chose panic instead.' It will not be forgotten.",
+  "🔮 The prophecy speaks without malice, which somehow makes it worse: You didn't lose because you're unlucky. You lost because you stopped paying attention to your own life a while ago.",
+  "🔮 The spirits convene one final time: They vote unanimously that this was, in fact, avoidable. You were the only variable.",
+  "🔮 Destiny writes it down for the record: 'Given every tool, chose none of them.' A quiet, forgettable tragedy.",
+  "🔮 The oracle offers one last thought before the vision fades: The scroll never stops for you. Maybe it's time you stopped for it.",
+];
+
+over18FortuneInsult.push(...over18FortuneInsultExtra2);
+
+// Closing message for PHILOSOPHY (reflective - no right/wrong, shown once
+// at the end regardless of which options were picked)
+export const philosophyClosingMessages = [
+  "🧘 You've stared into the void, and the void mostly just asked you follow-up questions. That's philosophy for you.",
+  "🧘 No right answers were harmed in the making of this quiz. Just your sense of certainty.",
+  "🧘 Congratulations, you now have more questions than when you started. That IS the point, unfortunately.",
+  "🧘 Socrates said the unexamined life isn't worth living. He never had to do it via a phone quiz at 11pm, though.",
+  "🧘 You've been mildly existentially rattled by an app that also insults you for math mistakes. Balance.",
+  "🧘 There's no score here, just vibes and the creeping sense that you should think about this more later. You won't.",
+  "🧘 Five questions, zero answers, one slightly shaken sense of self. Mission accomplished.",
+  "🧘 The universe remains indifferent to your choices. It was indifferent before this quiz too, but now you've noticed.",
+  "🧘 You've done more self-reflection in the last two minutes than most people do in a year. Low bar, but you cleared it.",
+  "🧘 Nothing was graded here except your willingness to actually think, which, refreshingly, you did.",
+];
+
+// Closing message for SOCIAL MEDIA (reflective - meant to sting a little)
+export const socialMediaClosingMessages = [
+  "📱 That's the mirror. It's not flattering, but it's accurate. Maybe put the phone down for like, ten minutes.",
+  "📱 Every answer you gave is a screenshot of a habit you already knew about and hoped nobody would ask you directly.",
+  "📱 The app that just roasted your screen time is, itself, on your screen right now. Sit with that irony for a second.",
+  "📱 You've now been called out by a quiz. This is rock bottom, or at least a nice flat ledge on the way down.",
+  "📱 None of this was made up. It was just your own answers, read back to you slightly meaner than you'd say them yourself.",
+  "📱 If even one of those questions made you wince, that's not the app being harsh. That's just Tuesday's screen-time report finally landing.",
+  "📱 Go outside. Touch grass. Put the phone in another room for an hour. We'll still be here, insulting people, when you get back.",
+  "📱 This wasn't a test you could fail. It was a test you could only be honest about, which for some of you was clearly harder.",
+  "📱 The algorithm doesn't love you back. It just knows exactly when to buzz. You already knew that. Now it's official.",
+  "📱 Somewhere, an unread notification badge just grew by one. It can wait. It has been waiting. It's fine. You're fine. Are you fine?",
+];
+
 // Congratulations for OVER 18 - FINAL GAME RESULT
 export const over18CongratulationMessages = [
   "You got brains. Beauty is missing but brains is okay.",

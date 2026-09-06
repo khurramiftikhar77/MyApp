@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PuzzleType } from '@/types/game';
 
 export interface UserProfile {
   nickname: string;
@@ -16,7 +17,7 @@ export interface UserProfile {
 export interface GameHistoryEntry {
   id: string;
   date: string;
-  puzzleType: 'math' | 'word';
+  puzzleType: PuzzleType;
   correctCount: number;
   totalQuestions: number;
   won: boolean;
@@ -145,7 +146,7 @@ export async function updateUserProgress(correctCount: number, totalQuestions: n
 }
 
 export async function recordGameResult(
-  puzzleType: 'math' | 'word',
+  puzzleType: PuzzleType,
   correctCount: number,
   totalQuestions: number,
   won: boolean

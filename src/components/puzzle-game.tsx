@@ -5,8 +5,8 @@ import { PuzzleSelectScreen } from '@/screens/PuzzleSelectScreen';
 import { QuizScreen } from '@/screens/QuizScreen';
 import { AnsweredQuestion, ResultsScreen } from '@/screens/ResultsScreen';
 import { StartScreen } from '@/screens/StartScreen';
-import { AgeGroup, Puzzle, PuzzleType } from '@/types/game';
-import { getGameResultMessage, getRandomPuzzles } from '@/utils/gameUtils';
+import { AgeGroup, isReflectivePuzzleType, Puzzle, PuzzleType } from '@/types/game';
+import { getGameResultMessage, getRandomPuzzles, getReflectiveClosingMessage } from '@/utils/gameUtils';
 import { getUser, recordGameResult, saveUser, updateUserInfo, updateUserProgress } from '@/utils/userStorage';
 import { useEffect, useState } from 'react';
 
@@ -146,12 +146,6 @@ export function PuzzleGameComponent() {
   };
 
   const handleAnswer = (userAnswer: string, isCorrect: boolean, feedbackMessage: string) => {
-    let newCorrectCount = correctCount;
-    if (isCorrect) {
-      newCorrectCount = correctCount + 1;
-      setCorrectCount(newCorrectCount);
-    }
-
     const currentPuzzle = puzzles[currentQuestionIndex];
     setAnswers((prev) => [
       ...prev,
@@ -165,6 +159,27 @@ export function PuzzleGameComponent() {
     ]);
 
     const totalAnswered = currentQuestionIndex + 1;
+
+    // Reflective categories (philosophy, social media) have no right/wrong
+    // answer, so there's no win/loss to track - just walk through all 5.
+    if (isReflectivePuzzleType(puzzleType!)) {
+      if (totalAnswered === 5) {
+        setHasWon(false);
+        setResultMessage(getReflectiveClosingMessage(puzzleType!));
+        setGameState('results');
+        recordGameResult(puzzleType!, 0, 5, false);
+      } else {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      }
+      return;
+    }
+
+    let newCorrectCount = correctCount;
+    if (isCorrect) {
+      newCorrectCount = correctCount + 1;
+      setCorrectCount(newCorrectCount);
+    }
+
     const wrongCount = totalAnswered - newCorrectCount;
     const gameOver = totalAnswered === 5 || newCorrectCount === 3 || wrongCount === 3;
 
@@ -281,6 +296,7 @@ export function PuzzleGameComponent() {
         totalQuestions={5}
         message={resultMessage}
         isWin={hasWon}
+        isReflective={isReflectivePuzzleType(puzzleType!)}
         ageGroup={ageGroup}
         answers={answers}
         userName={userName}
