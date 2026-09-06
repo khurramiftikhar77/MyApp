@@ -249,7 +249,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    justifyContent: 'center',
+    paddingVertical: 20,
   },
   formContainer: {
     width: '100%',

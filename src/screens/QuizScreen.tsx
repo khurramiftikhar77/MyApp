@@ -221,11 +221,16 @@ export function QuizScreen({
             {puzzle.options!.map((option, index) => (
               <TouchableOpacity
                 key={index}
-                style={styles.optionButton}
+                style={[
+                  styles.optionButton,
+                  { backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' },
+                ]}
                 onPress={() => handleSelectOption(option)}
                 disabled={showingFeedback || timedOut}
               >
-                <ThemedText style={styles.optionButtonText}>{option.text}</ThemedText>
+                <ThemedText style={[styles.optionButtonText, { color: isDark ? '#fff' : '#000' }]}>
+                  {option.text}
+                </ThemedText>
               </TouchableOpacity>
             ))}
           </View>
@@ -280,9 +285,9 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
   },
   content: {
     width: '100%',
