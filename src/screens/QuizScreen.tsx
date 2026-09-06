@@ -3,8 +3,10 @@ import { ThemedView } from '@/components/themed-view';
 import { AgeGroup, Puzzle } from '@/types/game';
 import { getRandomMessage } from '@/utils/gameUtils';
 import { useEffect, useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, View, useColorScheme } from 'react-native';
+import { Alert, StyleSheet, TextInput, TouchableOpacity, View, useColorScheme } from 'react-native';
 import { timeoutMessages } from '@/data/messages';
+
+const HURRY_UP_THRESHOLD = 10;
 
 interface QuizScreenProps {
   puzzle: Puzzle;
@@ -13,6 +15,7 @@ interface QuizScreenProps {
   correctCount: number;
   ageGroup: AgeGroup;
   onAnswer: (answer: string, isCorrect: boolean) => void;
+  onQuit: () => void;
 }
 
 export function QuizScreen({
@@ -22,6 +25,7 @@ export function QuizScreen({
   correctCount,
   ageGroup,
   onAnswer,
+  onQuit,
 }: QuizScreenProps) {
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean; isTimeout?: boolean } | null>(null);
@@ -87,13 +91,28 @@ export function QuizScreen({
     setTimeRemaining(20);
   };
 
-  const timerColor = timeRemaining <= 5 ? '#FF6B6B' : '#007AFF';
-  const timerBackgroundColor = timeRemaining <= 5 ? 'rgba(255, 107, 107, 0.1)' : 'rgba(0, 122, 255, 0.1)';
+  const isUrgent = timeRemaining <= HURRY_UP_THRESHOLD && timeRemaining > 0;
+  const timerColor = isUrgent ? '#FF6B6B' : '#007AFF';
+  const timerBackgroundColor = isUrgent ? 'rgba(255, 107, 107, 0.1)' : 'rgba(0, 122, 255, 0.1)';
+
+  const handleQuit = () => {
+    Alert.alert(
+      'Quitting already?',
+      "Typical. Your progress on this puzzle will be lost. Sure you want to bail?",
+      [
+        { text: 'Keep playing', style: 'cancel' },
+        { text: 'Quit', style: 'destructive', onPress: onQuit },
+      ]
+    );
+  };
 
   return (
     <ThemedView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.headerRow}>
+          <TouchableOpacity style={styles.quitButton} onPress={handleQuit}>
+            <ThemedText style={styles.quitButtonText}>✕ Quit</ThemedText>
+          </TouchableOpacity>
           <ThemedText type="subtitle" style={styles.progress}>
             Question {questionNumber} of {totalQuestions}
           </ThemedText>
@@ -103,6 +122,10 @@ export function QuizScreen({
             </ThemedText>
           </View>
         </View>
+
+        {isUrgent && !showingFeedback && (
+          <ThemedText style={styles.hurryText}>⏰ HURRY THE FUCK UP!</ThemedText>
+        )}
 
         <View style={styles.scoreContainer}>
           <ThemedText style={styles.score}>
@@ -195,9 +218,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
+  quitButton: {
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+  },
+  quitButtonText: {
+    color: '#FF6B6B',
+    fontSize: 13,
+    fontWeight: '700',
+  },
   progress: {
     textAlign: 'center',
     flex: 1,
+  },
+  hurryText: {
+    textAlign: 'center',
+    color: '#FF6B6B',
+    fontWeight: '800',
+    fontSize: 16,
+    marginBottom: 12,
   },
   timerBox: {
     borderRadius: 8,

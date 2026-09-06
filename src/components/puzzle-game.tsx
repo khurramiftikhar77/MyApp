@@ -138,6 +138,13 @@ export function PuzzleGameComponent() {
     setGameState('puzzleSelect');
   };
 
+  const handleQuitGame = () => {
+    setPuzzleType(null);
+    setCurrentQuestionIndex(0);
+    setCorrectCount(0);
+    setGameState('puzzleSelect');
+  };
+
   const handleBackHome = () => {
     setAgeGroup(null);
     setPuzzleType(null);
@@ -187,6 +194,7 @@ export function PuzzleGameComponent() {
         correctCount={correctCount}
         ageGroup={ageGroup}
         onAnswer={handleAnswer}
+        onQuit={handleQuitGame}
       />
     );
   }
