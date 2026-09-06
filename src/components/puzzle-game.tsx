@@ -4,6 +4,7 @@ import { LoginScreen } from '@/screens/LoginScreen';
 import { PuzzleSelectScreen } from '@/screens/PuzzleSelectScreen';
 import { QuizScreen } from '@/screens/QuizScreen';
 import { AnsweredQuestion, ResultsScreen } from '@/screens/ResultsScreen';
+import { StartScreen } from '@/screens/StartScreen';
 import { AgeGroup, Puzzle, PuzzleType } from '@/types/game';
 import { getGameResultMessage, getRandomPuzzles } from '@/utils/gameUtils';
 import { getUser, saveUser, updateUserInfo, updateUserProgress } from '@/utils/userStorage';
@@ -19,6 +20,7 @@ type GameScreenState =
   | 'editProfile';
 
 export function PuzzleGameComponent() {
+  const [showStart, setShowStart] = useState(true);
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
@@ -199,6 +201,10 @@ export function PuzzleGameComponent() {
     setResultMessage('');
     setGameState('ageSelect');
   };
+
+  if (showStart) {
+    return <StartScreen onContinue={() => setShowStart(false)} />;
+  }
 
   // Show nothing while initializing
   if (isInitializing) {

@@ -192,9 +192,7 @@ export function QuizScreen({
             </TouchableOpacity>
 
             <ThemedText type="small" style={styles.hint}>
-              {puzzle.type === 'math'
-                ? 'Enter the numerical answer'
-                : 'Enter your answer (not case-sensitive)'}
+              Enter your answer (not case-sensitive)
             </ThemedText>
           </>
         )}

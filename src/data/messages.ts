@@ -369,6 +369,18 @@ export function getBirthYearJoke(birthYear: number): string {
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
+// START SCREEN - rotating taglines, one picked at random each time the app opens
+export const startTaglines = [
+  "A puzzle game that roasts you if you're wrong, and barely tolerates you if you're right.",
+  "Warning: may cause a mild superiority complex or a full identity crisis. No in-between.",
+  "Five questions. Zero mercy. One cosmic fortune teller judging your soul at the end.",
+  "Proving humans can still think, one savage insult at a time.",
+  "The only game that fact-checks your intelligence AND your life choices.",
+  "Built for people who miss being roasted by their group chat.",
+  "Answer correctly and we'll begrudgingly respect you. Answer wrong and, well, good luck.",
+  "Not therapy. Not close to therapy. But weirdly cathartic.",
+];
+
 // LOGIN PAGE - ENCOURAGING MESSAGES
 export const loginWelcome = [
   "Welcome! Let's see if you're actually intelligent!",
