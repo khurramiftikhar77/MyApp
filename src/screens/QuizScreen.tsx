@@ -142,17 +142,14 @@ export function QuizScreen({
     );
   };
 
-  return (
-    <ThemedView style={styles.container}>
-      <KeyboardAvoidingView
-        style={styles.keyboardAvoider}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
-      >
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-      >
+  const screenBackground = isDark ? '#000' : '#fff';
+
+  const body = (
+    <ScrollView
+      contentContainerStyle={[styles.scrollContent, { backgroundColor: screenBackground }]}
+      style={{ backgroundColor: screenBackground }}
+      keyboardShouldPersistTaps="handled"
+    >
       <View style={styles.content}>
         <UserHeader name={userName} onEdit={onEditProfile} />
 
@@ -270,8 +267,22 @@ export function QuizScreen({
           </>
         )}
       </View>
-      </ScrollView>
-      </KeyboardAvoidingView>
+    </ScrollView>
+  );
+
+  return (
+    <ThemedView style={[styles.container, { backgroundColor: screenBackground }]}>
+      {isMcq ? (
+        body
+      ) : (
+        <KeyboardAvoidingView
+          style={[styles.keyboardAvoider, { backgroundColor: screenBackground }]}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
+        >
+          {body}
+        </KeyboardAvoidingView>
+      )}
     </ThemedView>
   );
 }
