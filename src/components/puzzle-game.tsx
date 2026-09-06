@@ -1,20 +1,32 @@
 import { AgeSelectScreen } from '@/screens/AgeSelectScreen';
+import { DisclaimerScreen } from '@/screens/DisclaimerScreen';
 import { PuzzleSelectScreen } from '@/screens/PuzzleSelectScreen';
 import { QuizScreen } from '@/screens/QuizScreen';
 import { ResultsScreen } from '@/screens/ResultsScreen';
 import { AgeGroup, Puzzle, PuzzleType } from '@/types/game';
-import { checkAnswer, getGameResultMessage, getRandomPuzzles } from '@/utils/gameUtils';
+import { getGameResultMessage, getRandomPuzzles } from '@/utils/gameUtils';
 import { useState } from 'react';
 
 export function PuzzleGameComponent() {
+  const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
   const [ageGroup, setAgeGroup] = useState<AgeGroup | null>(null);
   const [puzzleType, setPuzzleType] = useState<PuzzleType | null>(null);
-  const [gameState, setGameState] = useState<'ageSelect' | 'puzzleSelect' | 'playing' | 'results'>('ageSelect');
+  const [gameState, setGameState] = useState<'disclaimer' | 'ageSelect' | 'puzzleSelect' | 'playing' | 'results'>('disclaimer');
   const [puzzles, setPuzzles] = useState<Puzzle[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [resultMessage, setResultMessage] = useState('');
   const [hasWon, setHasWon] = useState(false);
+
+  const handleDisclaimerAccept = () => {
+    setDisclaimerAccepted(true);
+    setGameState('ageSelect');
+  };
+
+  const handleDisclaimerDecline = () => {
+    // Exit app or show message
+    setGameState('disclaimer');
+  };
 
   const handleAgeSelect = (age: AgeGroup) => {
     setAgeGroup(age);
@@ -30,10 +42,7 @@ export function PuzzleGameComponent() {
     setGameState('playing');
   };
 
-  const handleAnswer = (userAnswer: string) => {
-    const currentPuzzle = puzzles[currentQuestionIndex];
-    const isCorrect = checkAnswer(userAnswer, currentPuzzle.correctAnswer);
-
+  const handleAnswer = (userAnswer: string, isCorrect: boolean) => {
     let newCorrectCount = correctCount;
     if (isCorrect) {
       newCorrectCount = correctCount + 1;
@@ -73,6 +82,15 @@ export function PuzzleGameComponent() {
     setGameState('ageSelect');
   };
 
+  if (!disclaimerAccepted) {
+    return (
+      <DisclaimerScreen
+        onAccept={handleDisclaimerAccept}
+        onDecline={handleDisclaimerDecline}
+      />
+    );
+  }
+
   if (gameState === 'ageSelect') {
     return <AgeSelectScreen onSelectAge={handleAgeSelect} />;
   }
@@ -86,25 +104,27 @@ export function PuzzleGameComponent() {
     );
   }
 
-  if (gameState === 'playing' && puzzles.length > 0) {
+  if (gameState === 'playing' && puzzles.length > 0 && ageGroup) {
     return (
       <QuizScreen
         puzzle={puzzles[currentQuestionIndex]}
         questionNumber={currentQuestionIndex + 1}
         totalQuestions={5}
         correctCount={correctCount}
+        ageGroup={ageGroup}
         onAnswer={handleAnswer}
       />
     );
   }
 
-  if (gameState === 'results') {
+  if (gameState === 'results' && ageGroup) {
     return (
       <ResultsScreen
         correctCount={correctCount}
         totalQuestions={5}
         message={resultMessage}
         isWin={hasWon}
+        ageGroup={ageGroup}
         onPlayAgain={handlePlayAgain}
         onBackHome={handleBackHome}
       />

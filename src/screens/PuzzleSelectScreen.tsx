@@ -71,32 +71,42 @@ const styles = StyleSheet.create({
   heading: {
     marginBottom: 10,
     textAlign: 'center',
+    fontSize: 28,
+    fontWeight: 'bold',
   },
   subheading: {
     marginBottom: 40,
     textAlign: 'center',
     fontSize: 16,
+    fontWeight: '600',
   },
   button: {
     backgroundColor: '#007AFF',
-    paddingVertical: 20,
+    paddingVertical: 22,
     paddingHorizontal: 20,
-    borderRadius: 12,
+    borderRadius: 14,
     marginVertical: 12,
     width: '100%',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
   },
   wordButton: {
     backgroundColor: '#50C878',
   },
   buttonText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 20,
     marginBottom: 8,
+    fontWeight: '700',
   },
   buttonDesc: {
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: 'rgba(255, 255, 255, 0.9)',
     fontSize: 14,
+    fontWeight: '500',
   },
   backButton: {
     marginTop: 30,
@@ -106,5 +116,6 @@ const styles = StyleSheet.create({
   backButtonText: {
     fontSize: 16,
     color: '#007AFF',
+    fontWeight: '600',
   },
 });

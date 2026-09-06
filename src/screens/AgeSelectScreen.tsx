@@ -59,6 +59,8 @@ const styles = StyleSheet.create({
   heading: {
     marginBottom: 10,
     textAlign: 'center',
+    fontSize: 32,
+    fontWeight: 'bold',
   },
   subheading: {
     marginBottom: 40,
@@ -67,19 +69,25 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#007AFF',
-    paddingVertical: 16,
+    paddingVertical: 18,
     paddingHorizontal: 40,
-    borderRadius: 8,
-    marginVertical: 12,
+    borderRadius: 12,
+    marginVertical: 14,
     width: '100%',
     alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 5,
   },
   adultButton: {
     backgroundColor: '#FF6B6B',
   },
   buttonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: '600',
   },
   disclaimer: {
     marginTop: 30,
