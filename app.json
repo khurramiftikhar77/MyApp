@@ -45,6 +45,12 @@
         "projectId": "26116df3-42d2-4c37-bb44-d26666d85de3"
       }
     },
-    "owner": "khurram77"
+    "owner": "khurram77",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/26116df3-42d2-4c37-bb44-d26666d85de3"
+    }
   }
 }
