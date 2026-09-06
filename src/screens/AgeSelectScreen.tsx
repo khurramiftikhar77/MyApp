@@ -18,14 +18,12 @@ export function AgeSelectScreen({ onSelectAge }: AgeSelectScreenProps) {
           How old are you?
         </ThemedText>
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => onSelectAge('under18')}
-        >
-          <ThemedText type="defaultSemiBold" style={styles.buttonText}>
+        <View style={[styles.button, styles.comingSoonButton]}>
+          <ThemedText type="defaultSemiBold" style={[styles.buttonText, styles.comingSoonText]}>
             Under 18
           </ThemedText>
-        </TouchableOpacity>
+          <ThemedText style={styles.comingSoonLabel}>Coming Soon</ThemedText>
+        </View>
 
         <TouchableOpacity
           style={[styles.button, styles.adultButton]}
@@ -84,10 +82,23 @@ const styles = StyleSheet.create({
   adultButton: {
     backgroundColor: '#FF6B6B',
   },
+  comingSoonButton: {
+    backgroundColor: 'rgba(128, 128, 128, 0.3)',
+    opacity: 0.6,
+  },
   buttonText: {
     color: 'white',
     fontSize: 18,
     fontWeight: '600',
+  },
+  comingSoonText: {
+    opacity: 0.7,
+  },
+  comingSoonLabel: {
+    color: 'rgba(255, 255, 255, 0.7)',
+    fontSize: 12,
+    marginTop: 4,
+    fontStyle: 'italic',
   },
   disclaimer: {
     marginTop: 30,

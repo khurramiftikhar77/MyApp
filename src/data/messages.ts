@@ -162,3 +162,79 @@ export const under18InsultMessages = [
   "Keep practicing! Every attempt makes you smarter!",
   "You'll nail it next time! I believe in you!",
 ];
+
+// TIMEOUT MESSAGES (18+)
+export const timeoutMessages = [
+  "TIME'S UP! Your brain works at the speed of a dial-up modem!",
+  "TIMEOUT! Apparently thinking takes too long for you.",
+  "Time expired! You need a turbo boost on that CPU.",
+  "RAN OUT OF TIME! That's what happens when you don't have critical thinking.",
+  "TIMEOUT! You froze like your creativity.",
+  "TIME'S UP! Your mind is slower than a snail on sedatives.",
+  "Can't beat the clock? Join the AI then, you're fucked anyway!",
+  "TIMEOUT! Even AI would've been faster. Embarrassing.",
+  "Ran out of time! Maybe focus instead of scrolling TikTok?",
+  "TIME'S UP! Your reaction time is as dead as your sense of urgency.",
+  "Too slow! Your brain needs a system update, ASAP.",
+  "TIMEOUT! This is what happens when you let social media kill your speed.",
+  "Time expired! You couldn't even think in 20 seconds. Yikes.",
+  "TIMEOUT! Slowpoke detected!",
+  "Out of time! Your mental processor is overheating.",
+  "TIME'S UP! That was pathetically slow.",
+  "Ran out of time! Even a potato thinks faster.",
+  "TIMEOUT! You must've been taking a nap.",
+  "Time expired! Speed isn't your strong suit, is it?",
+  "TOO SLOW! Your neural network is congested.",
+];
+
+// LOGIN PAGE - NICKNAME FEEDBACK
+export const nicknameJokes = [
+  "Really? THIS is what you are going but okay...",
+  "That's... bold. I'll give you that.",
+  "Well, that's certainly a choice.",
+  "Interesting nickname energy. No judgment though.",
+  "Okay okay, I see what you did there.",
+  "That's what your parents named you? Jk, okay!",
+  "Alright, going with that eh?",
+  "That's very... unique. Let's continue!",
+  "Really trying to stand out, aren't we?",
+  "That nickname has... potential. Sure.",
+  "Going full creative mode I see!",
+  "That's the one? Okay then, moving on!",
+  "Wow, really leaning into that are we?",
+  "That's definitely a name. Yes.",
+  "I've seen bolder choices but sure, let's go!",
+];
+
+// LOGIN PAGE - BIRTH YEAR FEEDBACK
+export const birthYearJokes = [
+  "HAHAHA you fucking dinosaur! That's ancient!",
+  "Holy shit, you're OLD! Welcome to the relic club!",
+  "Wow, you remember when the internet was dial-up? RESPECT!",
+  "DAMN! You're from the stone age! No wonder you're here improving your brain!",
+  "You're fucking ANCIENT! But hey, you've got wisdom!",
+  "Jesus Christ, you're basically a fossil! But a smart one though!",
+  "That year? You survived Y2K! Legend status!",
+  "Damn, you were born when dinosaurs were still roaming!",
+  "HOLY FUCK you're old! But intelligent at least!",
+  "That's a century ago! Welcome, you magnificent elder!",
+  "You predate smartphones! No wonder you can still THINK!",
+  "Born in that era? You've got street cred with your brain!",
+  "Okay boomer, let's see if you can keep up!",
+  "You're a relic from when people actually READ books!",
+  "That year exists?! You survived so much! Respect!",
+];
+
+// LOGIN PAGE - ENCOURAGING MESSAGES
+export const loginWelcome = [
+  "Welcome! Let's see if you're actually intelligent!",
+  "Alright, let's test that brain of yours!",
+  "Ready to prove you can still think? Let's go!",
+  "Welcome to the arena! Show us what you've got!",
+  "Let's see if you're smarter than an algorithm!",
+  "You made it this far. Impressive! Let's begin!",
+  "Buckle up! Time to prove humanity isn't done for!",
+  "Here we go! Let's see that critical thinking!",
+  "Welcome back, thinker! Ready for round two?",
+  "Let's fucking GO! Show the AI who's boss!",
+];

@@ -1,31 +1,61 @@
 import { AgeSelectScreen } from '@/screens/AgeSelectScreen';
 import { DisclaimerScreen } from '@/screens/DisclaimerScreen';
+import { LoginScreen } from '@/screens/LoginScreen';
 import { PuzzleSelectScreen } from '@/screens/PuzzleSelectScreen';
 import { QuizScreen } from '@/screens/QuizScreen';
 import { ResultsScreen } from '@/screens/ResultsScreen';
 import { AgeGroup, Puzzle, PuzzleType } from '@/types/game';
 import { getGameResultMessage, getRandomPuzzles } from '@/utils/gameUtils';
-import { useState } from 'react';
+import { getUser, saveUser, updateUserProgress } from '@/utils/userStorage';
+import { useEffect, useState } from 'react';
 
 export function PuzzleGameComponent() {
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [userName, setUserName] = useState('');
   const [ageGroup, setAgeGroup] = useState<AgeGroup | null>(null);
   const [puzzleType, setPuzzleType] = useState<PuzzleType | null>(null);
-  const [gameState, setGameState] = useState<'disclaimer' | 'ageSelect' | 'puzzleSelect' | 'playing' | 'results'>('disclaimer');
+  const [gameState, setGameState] = useState<
+    'disclaimer' | 'login' | 'ageSelect' | 'puzzleSelect' | 'playing' | 'results'
+  >('disclaimer');
   const [puzzles, setPuzzles] = useState<Puzzle[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [resultMessage, setResultMessage] = useState('');
   const [hasWon, setHasWon] = useState(false);
 
+  // Check if user already exists
+  useEffect(() => {
+    const checkExistingUser = async () => {
+      const existingUser = await getUser();
+      if (existingUser) {
+        setUserLoggedIn(true);
+        setUserName(existingUser.nickname);
+        setDisclaimerAccepted(true);
+        setGameState('ageSelect');
+      }
+    };
+    checkExistingUser();
+  }, []);
+
   const handleDisclaimerAccept = () => {
     setDisclaimerAccepted(true);
-    setGameState('ageSelect');
+    setGameState('login');
   };
 
   const handleDisclaimerDecline = () => {
-    // Exit app or show message
     setGameState('disclaimer');
+  };
+
+  const handleLogin = async (nickname: string, birthYear: number) => {
+    try {
+      await saveUser(nickname, birthYear);
+      setUserLoggedIn(true);
+      setUserName(nickname);
+      setGameState('ageSelect');
+    } catch (error) {
+      console.error('Login error:', error);
+    }
   };
 
   const handleAgeSelect = (age: AgeGroup) => {
@@ -49,7 +79,6 @@ export function PuzzleGameComponent() {
       setCorrectCount(newCorrectCount);
     }
 
-    // Check if game is over (5 questions asked or 3 correct or 3 wrong)
     const totalAnswered = currentQuestionIndex + 1;
     const wrongCount = totalAnswered - newCorrectCount;
     const gameOver = totalAnswered === 5 || newCorrectCount === 3 || wrongCount === 3;
@@ -60,6 +89,9 @@ export function PuzzleGameComponent() {
       const message = getGameResultMessage(newCorrectCount, ageGroup!, won);
       setResultMessage(message);
       setGameState('results');
+      
+      // Update user progress
+      updateUserProgress(newCorrectCount, 5);
     } else {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
@@ -89,6 +121,10 @@ export function PuzzleGameComponent() {
         onDecline={handleDisclaimerDecline}
       />
     );
+  }
+
+  if (!userLoggedIn) {
+    return <LoginScreen onLogin={handleLogin} />;
   }
 
   if (gameState === 'ageSelect') {
