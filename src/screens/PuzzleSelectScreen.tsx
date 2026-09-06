@@ -1,17 +1,22 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { UserHeader } from '@/components/user-header';
 import { PuzzleType } from '@/types/game';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 interface PuzzleSelectScreenProps {
   onSelectType: (type: PuzzleType) => void;
   onBack: () => void;
+  userName: string;
+  onEditProfile: () => void;
 }
 
-export function PuzzleSelectScreen({ onSelectType, onBack }: PuzzleSelectScreenProps) {
+export function PuzzleSelectScreen({ onSelectType, onBack, userName, onEditProfile }: PuzzleSelectScreenProps) {
   return (
     <ThemedView style={styles.container}>
       <View style={styles.content}>
+        <UserHeader name={userName} onEdit={onEditProfile} />
+
         <ThemedText type="title" style={styles.heading}>
           Choose Puzzle Type
         </ThemedText>

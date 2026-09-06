@@ -3,24 +3,34 @@ import { DisclaimerScreen } from '@/screens/DisclaimerScreen';
 import { LoginScreen } from '@/screens/LoginScreen';
 import { PuzzleSelectScreen } from '@/screens/PuzzleSelectScreen';
 import { QuizScreen } from '@/screens/QuizScreen';
-import { ResultsScreen } from '@/screens/ResultsScreen';
+import { AnsweredQuestion, ResultsScreen } from '@/screens/ResultsScreen';
 import { AgeGroup, Puzzle, PuzzleType } from '@/types/game';
 import { getGameResultMessage, getRandomPuzzles } from '@/utils/gameUtils';
-import { getUser, saveUser, updateUserProgress } from '@/utils/userStorage';
+import { getUser, saveUser, updateUserInfo, updateUserProgress } from '@/utils/userStorage';
 import { useEffect, useState } from 'react';
+
+type GameScreenState =
+  | 'disclaimer'
+  | 'login'
+  | 'ageSelect'
+  | 'puzzleSelect'
+  | 'playing'
+  | 'results'
+  | 'editProfile';
 
 export function PuzzleGameComponent() {
   const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const [userName, setUserName] = useState('');
+  const [birthYear, setBirthYear] = useState<number | undefined>(undefined);
   const [ageGroup, setAgeGroup] = useState<AgeGroup | null>(null);
   const [puzzleType, setPuzzleType] = useState<PuzzleType | null>(null);
-  const [gameState, setGameState] = useState<
-    'disclaimer' | 'login' | 'ageSelect' | 'puzzleSelect' | 'playing' | 'results'
-  >('disclaimer');
+  const [gameState, setGameState] = useState<GameScreenState>('disclaimer');
+  const [preEditState, setPreEditState] = useState<GameScreenState>('ageSelect');
   const [puzzles, setPuzzles] = useState<Puzzle[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
+  const [answers, setAnswers] = useState<AnsweredQuestion[]>([]);
   const [resultMessage, setResultMessage] = useState('');
   const [hasWon, setHasWon] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
@@ -37,6 +47,7 @@ export function PuzzleGameComponent() {
         if (existingUser) {
           setUserLoggedIn(true);
           setUserName(existingUser.nickname);
+          setBirthYear(existingUser.birthYear);
           setDisclaimerAccepted(true);
           setGameState('ageSelect');
         } else {
@@ -76,19 +87,39 @@ export function PuzzleGameComponent() {
     setGameState('disclaimer');
   };
 
-  const handleLogin = async (nickname: string, birthYear: number) => {
+  const handleLogin = async (nickname: string, newBirthYear: number) => {
     try {
-      await saveUser(nickname, birthYear);
-      setUserLoggedIn(true);
-      setUserName(nickname);
-      setGameState('ageSelect');
+      await saveUser(nickname, newBirthYear);
     } catch (error) {
       console.error('Login error:', error);
       // Still allow user to proceed even if storage fails
+    } finally {
       setUserLoggedIn(true);
       setUserName(nickname);
+      setBirthYear(newBirthYear);
       setGameState('ageSelect');
     }
+  };
+
+  const handleEditProfile = () => {
+    setPreEditState(gameState);
+    setGameState('editProfile');
+  };
+
+  const handleSaveProfile = async (nickname: string, newBirthYear: number) => {
+    try {
+      await updateUserInfo(nickname, newBirthYear);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    } finally {
+      setUserName(nickname);
+      setBirthYear(newBirthYear);
+      setGameState(preEditState);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setGameState(preEditState);
   };
 
   const handleAgeSelect = (age: AgeGroup) => {
@@ -102,6 +133,7 @@ export function PuzzleGameComponent() {
     setPuzzles(newPuzzles);
     setCurrentQuestionIndex(0);
     setCorrectCount(0);
+    setAnswers([]);
     setGameState('playing');
   };
 
@@ -111,6 +143,17 @@ export function PuzzleGameComponent() {
       newCorrectCount = correctCount + 1;
       setCorrectCount(newCorrectCount);
     }
+
+    const currentPuzzle = puzzles[currentQuestionIndex];
+    setAnswers((prev) => [
+      ...prev,
+      {
+        question: currentPuzzle.question,
+        userAnswer,
+        correctAnswer: currentPuzzle.correctAnswer,
+        isCorrect,
+      },
+    ]);
 
     const totalAnswered = currentQuestionIndex + 1;
     const wrongCount = totalAnswered - newCorrectCount;
@@ -122,7 +165,7 @@ export function PuzzleGameComponent() {
       const message = getGameResultMessage(newCorrectCount, ageGroup!, won);
       setResultMessage(message);
       setGameState('results');
-      
+
       // Update user progress
       updateUserProgress(newCorrectCount, 5);
     } else {
@@ -133,6 +176,7 @@ export function PuzzleGameComponent() {
   const handlePlayAgain = () => {
     setCurrentQuestionIndex(0);
     setCorrectCount(0);
+    setAnswers([]);
     setResultMessage('');
     setPuzzleType(null);
     setGameState('puzzleSelect');
@@ -142,6 +186,7 @@ export function PuzzleGameComponent() {
     setPuzzleType(null);
     setCurrentQuestionIndex(0);
     setCorrectCount(0);
+    setAnswers([]);
     setGameState('puzzleSelect');
   };
 
@@ -150,6 +195,7 @@ export function PuzzleGameComponent() {
     setPuzzleType(null);
     setCurrentQuestionIndex(0);
     setCorrectCount(0);
+    setAnswers([]);
     setResultMessage('');
     setGameState('ageSelect');
   };
@@ -172,8 +218,20 @@ export function PuzzleGameComponent() {
     return <LoginScreen onLogin={handleLogin} />;
   }
 
+  if (gameState === 'editProfile') {
+    return (
+      <LoginScreen
+        isEditing
+        initialNickname={userName}
+        initialBirthYear={birthYear}
+        onLogin={handleSaveProfile}
+        onCancel={handleCancelEdit}
+      />
+    );
+  }
+
   if (gameState === 'ageSelect') {
-    return <AgeSelectScreen onSelectAge={handleAgeSelect} />;
+    return <AgeSelectScreen onSelectAge={handleAgeSelect} userName={userName} onEditProfile={handleEditProfile} />;
   }
 
   if (gameState === 'puzzleSelect') {
@@ -181,6 +239,8 @@ export function PuzzleGameComponent() {
       <PuzzleSelectScreen
         onSelectType={handlePuzzleSelect}
         onBack={handleBackHome}
+        userName={userName}
+        onEditProfile={handleEditProfile}
       />
     );
   }
@@ -193,8 +253,10 @@ export function PuzzleGameComponent() {
         totalQuestions={5}
         correctCount={correctCount}
         ageGroup={ageGroup}
+        userName={userName}
         onAnswer={handleAnswer}
         onQuit={handleQuitGame}
+        onEditProfile={handleEditProfile}
       />
     );
   }
@@ -207,8 +269,11 @@ export function PuzzleGameComponent() {
         message={resultMessage}
         isWin={hasWon}
         ageGroup={ageGroup}
+        answers={answers}
+        userName={userName}
         onPlayAgain={handlePlayAgain}
         onBackHome={handleBackHome}
+        onEditProfile={handleEditProfile}
       />
     );
   }

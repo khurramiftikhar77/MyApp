@@ -1,28 +1,33 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { getBirthYearJoke, nicknameJokes } from '@/data/messages';
-import { useState } from 'react';
+import { pickUniqueMessage } from '@/utils/gameUtils';
+import { useRef, useState } from 'react';
 import { ScrollView, StyleSheet, TextInput, TouchableOpacity, View, useColorScheme } from 'react-native';
 
 interface LoginScreenProps {
   onLogin: (nickname: string, birthYear: number) => void;
+  isEditing?: boolean;
+  initialNickname?: string;
+  initialBirthYear?: number;
+  onCancel?: () => void;
 }
 
-export function LoginScreen({ onLogin }: LoginScreenProps) {
-  const [nickname, setNickname] = useState('');
-  const [birthYear, setBirthYear] = useState('');
+export function LoginScreen({ onLogin, isEditing = false, initialNickname = '', initialBirthYear, onCancel }: LoginScreenProps) {
+  const [nickname, setNickname] = useState(initialNickname);
+  const [birthYear, setBirthYear] = useState(initialBirthYear ? String(initialBirthYear) : '');
   const [nicknameReaction, setNicknameReaction] = useState('');
   const [birthYearReaction, setBirthYearReaction] = useState('');
-  const [disclaimerAccepted, setDisclaimerAccepted] = useState(false);
-  const [showForm, setShowForm] = useState(false);
+  const [disclaimerAccepted, setDisclaimerAccepted] = useState(isEditing);
+  const [showForm, setShowForm] = useState(isEditing);
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
+  const usedNicknameJokes = useRef(new Set<string>());
 
   const handleNicknameChange = (text: string) => {
     setNickname(text);
     if (text.trim().length > 0) {
-      const randomJoke = nicknameJokes[Math.floor(Math.random() * nicknameJokes.length)];
-      setNicknameReaction(randomJoke);
+      setNicknameReaction(pickUniqueMessage(nicknameJokes, usedNicknameJokes.current));
     } else {
       setNicknameReaction('');
     }
@@ -116,7 +121,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
         ) : (
           <View style={styles.formContainer}>
             <ThemedText type="title" style={styles.formTitle}>
-              Who Are You?
+              {isEditing ? 'Edit Your Info' : 'Who Are You?'}
             </ThemedText>
 
             <ThemedText type="subtitle" style={styles.formSubtitle}>
@@ -175,9 +180,17 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
               disabled={!isFormValid}
             >
               <ThemedText type="defaultSemiBold" style={styles.buttonText}>
-                Enter the Arena
+                {isEditing ? 'Save Changes' : 'Enter the Arena'}
               </ThemedText>
             </TouchableOpacity>
+
+            {isEditing && onCancel && (
+              <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
+                <ThemedText type="defaultSemiBold" style={styles.cancelButtonText}>
+                  Cancel
+                </ThemedText>
+              </TouchableOpacity>
+            )}
 
             <ThemedText type="small" style={styles.note}>
               Your progress will be tracked. No personal data stored.
@@ -346,6 +359,15 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 16,
+  },
+  cancelButton: {
+    paddingVertical: 12,
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  cancelButtonText: {
+    color: '#999',
+    fontSize: 14,
   },
   note: {
     textAlign: 'center',

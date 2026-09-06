@@ -1,16 +1,21 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { UserHeader } from '@/components/user-header';
 import { AgeGroup } from '@/types/game';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 interface AgeSelectScreenProps {
   onSelectAge: (age: AgeGroup) => void;
+  userName: string;
+  onEditProfile: () => void;
 }
 
-export function AgeSelectScreen({ onSelectAge }: AgeSelectScreenProps) {
+export function AgeSelectScreen({ onSelectAge, userName, onEditProfile }: AgeSelectScreenProps) {
   return (
     <ThemedView style={styles.container}>
       <View style={styles.content}>
+        <UserHeader name={userName} onEdit={onEditProfile} />
+
         <ThemedText type="title" style={styles.heading}>
           What the Fun!
         </ThemedText>

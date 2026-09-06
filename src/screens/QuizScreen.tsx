@@ -1,8 +1,9 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { UserHeader } from '@/components/user-header';
 import { AgeGroup, Puzzle } from '@/types/game';
-import { getRandomMessage } from '@/utils/gameUtils';
-import { useEffect, useState } from 'react';
+import { getRandomMessage, pickUniqueMessage } from '@/utils/gameUtils';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, TextInput, TouchableOpacity, View, useColorScheme } from 'react-native';
 import { timeoutMessages } from '@/data/messages';
 
@@ -14,8 +15,10 @@ interface QuizScreenProps {
   totalQuestions: number;
   correctCount: number;
   ageGroup: AgeGroup;
+  userName: string;
   onAnswer: (answer: string, isCorrect: boolean) => void;
   onQuit: () => void;
+  onEditProfile: () => void;
 }
 
 export function QuizScreen({
@@ -24,8 +27,10 @@ export function QuizScreen({
   totalQuestions,
   correctCount,
   ageGroup,
+  userName,
   onAnswer,
   onQuit,
+  onEditProfile,
 }: QuizScreenProps) {
   const [userAnswer, setUserAnswer] = useState('');
   const [feedback, setFeedback] = useState<{ message: string; isCorrect: boolean; isTimeout?: boolean } | null>(null);
@@ -34,6 +39,8 @@ export function QuizScreen({
   const [timedOut, setTimedOut] = useState(false);
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
+  const usedFeedback = useRef(new Set<string>());
+  const usedTimeouts = useRef(new Set<string>());
 
   // Timer effect
   useEffect(() => {
@@ -61,22 +68,15 @@ export function QuizScreen({
   // Handle timeout when timedOut state changes
   useEffect(() => {
     if (timedOut && !feedback) {
-      const timeoutMessage = timeoutMessages[Math.floor(Math.random() * timeoutMessages.length)];
+      const timeoutMessage = pickUniqueMessage(timeoutMessages, usedTimeouts.current);
       setFeedback({ message: timeoutMessage, isCorrect: false, isTimeout: true });
     }
   }, [timedOut, feedback]);
 
-  const handleTimeout = () => {
-    setTimedOut(true);
-    const timeoutMessage = timeoutMessages[Math.floor(Math.random() * timeoutMessages.length)];
-    setFeedback({ message: timeoutMessage, isCorrect: false, isTimeout: true });
-    setShowingFeedback(true);
-  };
-
   const handleSubmit = () => {
     if (userAnswer.trim() && !showingFeedback) {
       const isCorrect = userAnswer.toLowerCase().trim() === puzzle.correctAnswer.toLowerCase().trim();
-      const message = getRandomMessage(isCorrect, ageGroup);
+      const message = getRandomMessage(isCorrect, ageGroup, usedFeedback.current);
       setFeedback({ message, isCorrect });
       setShowingFeedback(true);
     }
@@ -109,6 +109,8 @@ export function QuizScreen({
   return (
     <ThemedView style={styles.container}>
       <View style={styles.content}>
+        <UserHeader name={userName} onEdit={onEditProfile} />
+
         <View style={styles.headerRow}>
           <TouchableOpacity style={styles.quitButton} onPress={handleQuit}>
             <ThemedText style={styles.quitButtonText}>✕ Quit</ThemedText>

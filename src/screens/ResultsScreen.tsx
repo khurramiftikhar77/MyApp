@@ -1,8 +1,16 @@
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { over18FortuneTeller, under18FortuneTeller } from '@/data/messages';
+import { UserHeader } from '@/components/user-header';
 import { AgeGroup } from '@/types/game';
+import { getFortuneMessage } from '@/utils/gameUtils';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+
+export interface AnsweredQuestion {
+  question: string;
+  userAnswer: string;
+  correctAnswer: string;
+  isCorrect: boolean;
+}
 
 interface ResultsScreenProps {
   correctCount: number;
@@ -10,8 +18,11 @@ interface ResultsScreenProps {
   message: string;
   isWin: boolean;
   ageGroup: AgeGroup;
+  answers: AnsweredQuestion[];
+  userName: string;
   onPlayAgain: () => void;
   onBackHome: () => void;
+  onEditProfile: () => void;
 }
 
 export function ResultsScreen({
@@ -20,15 +31,19 @@ export function ResultsScreen({
   message,
   isWin,
   ageGroup,
+  answers,
+  userName,
   onPlayAgain,
   onBackHome,
+  onEditProfile,
 }: ResultsScreenProps) {
-  const fortuneTellerMessages = ageGroup === 'over18' ? over18FortuneTeller : under18FortuneTeller;
-  const fortuneMessage = fortuneTellerMessages[Math.floor(Math.random() * fortuneTellerMessages.length)];
+  const fortuneMessage = getFortuneMessage(ageGroup, isWin);
 
   return (
     <ThemedView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
+        <UserHeader name={userName} onEdit={onEditProfile} />
+
         <View style={[styles.resultContainer, isWin && styles.winContainer]}>
           <ThemedText type="title" style={styles.resultTitle}>
             {isWin ? '🎉 WINNER! 🎉' : '😅 Game Over'}
@@ -47,6 +62,30 @@ export function ResultsScreen({
           <View style={styles.fortuneBox}>
             <ThemedText style={styles.fortuneMessage}>{fortuneMessage}</ThemedText>
           </View>
+        </View>
+
+        <View style={styles.reviewBox}>
+          <ThemedText type="defaultSemiBold" style={styles.reviewTitle}>
+            Your Answers:
+          </ThemedText>
+          {answers.map((answer, index) => (
+            <View
+              key={index}
+              style={[styles.reviewItem, answer.isCorrect ? styles.reviewItemCorrect : styles.reviewItemWrong]}
+            >
+              <ThemedText style={styles.reviewQuestion}>
+                {index + 1}. {answer.question}
+              </ThemedText>
+              <ThemedText style={styles.reviewAnswer}>
+                {answer.isCorrect ? '✅' : '❌'} Your answer: {answer.userAnswer || '(no answer)'}
+              </ThemedText>
+              {!answer.isCorrect && (
+                <ThemedText style={styles.reviewCorrectAnswer}>
+                  Correct answer: {answer.correctAnswer}
+                </ThemedText>
+              )}
+            </View>
+          ))}
         </View>
 
         <View style={styles.buttonContainer}>
@@ -153,6 +192,43 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 22,
     fontStyle: 'italic',
+  },
+  reviewBox: {
+    width: '100%',
+    maxWidth: 400,
+    marginBottom: 24,
+  },
+  reviewTitle: {
+    fontSize: 16,
+    marginBottom: 12,
+  },
+  reviewItem: {
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 10,
+    borderLeftWidth: 4,
+  },
+  reviewItemCorrect: {
+    backgroundColor: 'rgba(80, 200, 120, 0.1)',
+    borderLeftColor: '#50C878',
+  },
+  reviewItemWrong: {
+    backgroundColor: 'rgba(255, 107, 107, 0.1)',
+    borderLeftColor: '#FF6B6B',
+  },
+  reviewQuestion: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 6,
+  },
+  reviewAnswer: {
+    fontSize: 13,
+  },
+  reviewCorrectAnswer: {
+    fontSize: 13,
+    marginTop: 2,
+    color: '#50C878',
+    fontWeight: '600',
   },
   buttonContainer: {
     width: '100%',

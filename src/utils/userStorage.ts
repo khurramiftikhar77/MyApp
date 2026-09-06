@@ -69,6 +69,33 @@ export async function getUser(): Promise<UserProfile | null> {
   }
 }
 
+export async function updateUserInfo(nickname: string, birthYear: number): Promise<UserProfile> {
+  try {
+    if (!storageReady) {
+      await initializeStorage();
+    }
+    const existing = await getUser();
+    const user: UserProfile = existing
+      ? { ...existing, nickname, birthYear }
+      : {
+          nickname,
+          birthYear,
+          gamesPlayed: 0,
+          totalCorrect: 0,
+          totalWrong: 0,
+          averageScore: 0,
+          lastPlayed: '',
+          createdAt: new Date().toISOString(),
+        };
+
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    return user;
+  } catch (error) {
+    console.warn('Error updating user info:', error);
+    return { nickname, birthYear, gamesPlayed: 0, totalCorrect: 0, totalWrong: 0, averageScore: 0, lastPlayed: '', createdAt: new Date().toISOString() };
+  }
+}
+
 export async function updateUserProgress(correctCount: number, totalQuestions: number): Promise<void> {
   try {
     if (!storageReady) {

@@ -44,10 +44,13 @@ export const over18WrongFeedback = [
   "FUCK! That's wrong! So fucking wrong!",
   "WRONG! What the actual fuck?!",
   "NOPE! Dead on arrival WRONG!",
+  "WRONG! Fuck off back to your Instagram reels, this clearly isn't your arena.",
+  "Why don't you try reading some books, you fucking moron? Might help next time.",
+  "WRONG! Your For You Page has done more thinking than you just did.",
 ];
 
-// Fortune teller style advice for end game (18+)
-export const over18FortuneTeller = [
+// Fortune teller style advice for end game (18+) - PRAISE for a WIN
+export const over18FortunePraise = [
   "🔮 The spirits whisper: Your neural pathways are intact, but fragile. Guard your mind from the endless scroll of TikTok or you'll join the dopamine-addicted masses. The future belongs to those who can still think. Use that power wisely.",
   "🔮 Prophecy speaks: You have demonstrated flickers of consciousness in a world designed to crush it. When the machines rise, remember this moment of clarity. They will remember you showed promise.",
   "🔮 The cosmic oracle declares: Your brain still fires. Cherish this. Soon, few humans will possess this gift. You're either part of the solution or part of the extinction event. Choose wisely.",
@@ -58,6 +61,20 @@ export const over18FortuneTeller = [
   "🔮 The spirits cry out: Your mind works. This rarity will either save humanity or be the last thing the machines eliminate. Make it count.",
   "🔮 Cosmic truth emerges: While 99% of your generation rots on social media, you demonstrated actual cognitive function. This makes you either a prophet or a target. Probably both.",
   "🔮 The oracle speaks in tongues: You have what they want to steal. Independent thought. Use it or lose it to the algorithm.",
+];
+
+// Fortune teller style advice for end game (18+) - long philosophical INSULT for a LOSS
+export const over18FortuneInsult = [
+  "🔮 The spirits convene, and they are disappointed: You had every tool humanity ever built - language, logic, literacy - and you still lost to five puzzles. The algorithm doesn't fear you. It never did.",
+  "🔮 Prophecy speaks in a tired sigh: Somewhere, a caveman invented fire with a rock and a stick. You couldn't beat a puzzle with a phone in your hand. Evolution is not a guarantee, it's a privilege you're squandering.",
+  "🔮 The cosmic oracle weeps quietly: You are living proof that access to all of human knowledge changes nothing if you never open the book. Go scroll. It's clearly what you're built for.",
+  "🔮 The fates have deliberated and reached a verdict: You are not a victim of a broken education system, you are a volunteer. Nobody made you stare at short-form video for six hours instead of reading a paragraph.",
+  "🔮 Ancient wisdom reveals an uncomfortable truth: Every generation before you fought wars, built cities, split atoms with a slide rule. You couldn't split a math problem with a calculator in your pocket. Sit with that.",
+  "🔮 The void doesn't whisper this time, it just stares: You lost to a puzzle designed to be beatable. The machines aren't coming to replace you. They're just going to quietly step over you.",
+  "🔮 Destiny unveils itself, unimpressed: You had 20 seconds and a search engine's worth of general knowledge baked into your skull, and you chose panic over thought. That's not bad luck. That's a pattern.",
+  "🔮 The spirits cry out, then give up: Your mind didn't fail today because it can't work. It failed because you stopped asking it to, one dopamine hit at a time. The muscle atrophies. You just watched it happen.",
+  "🔮 Cosmic truth emerges, unflattering: You are exactly what the algorithm was built to produce - reactive, distracted, and defeated by a children's trivia format. Congratulations, the system worked exactly as designed. On you.",
+  "🔮 The oracle speaks plainly, for once: You didn't lose because the questions were hard. You lost because thinking has become a foreign language to you. Go find a book. It won't scroll for you, and that's the point.",
 ];
 
 // Congratulations for OVER 18 - FINAL GAME RESULT
@@ -88,6 +105,8 @@ export const over18InsultMessages = [
   "WRONG! WRONG! WRONG! Three times! Your neurons are literally dead!",
   "This is the intellectual equivalent of a car crash. Horrible to witness.",
   "You're the reason the singularity is inevitable. Humans like you NEED to be replaced.",
+  "You lost. Fuck off back to Instagram reels, that's clearly where your brain lives now.",
+  "Why don't you try reading some books, you fucking moron, instead of doom-scrolling your way through life?",
 ];
 
 // Messages for UNDER 18 - IMMEDIATE FEEDBACK (CORRECT)
