@@ -49,6 +49,27 @@ export const over18WrongFeedback = [
   "WRONG! Your For You Page has done more thinking than you just did.",
 ];
 
+// Additional OVER 18 - IMMEDIATE FEEDBACK (WRONG - HARSH)
+export const over18WrongFeedbackExtra = [
+  "Your brain rot has officially reached max level. Congratulations, I guess.",
+  "WRONG! Even a Magic 8-Ball guesses better than that.",
+  "Aliens are studying that answer and still can't figure out what went wrong with humanity.",
+  "WRONG! That answer just personally offended every teacher who ever taught you.",
+  "Nope. Somewhere, autocorrect is embarrassed FOR you.",
+  "WRONG! ChatGPT wouldn't even hallucinate something that bad.",
+  "That's incorrect, and honestly kind of impressively so.",
+  "WRONG! Your neurons just filed for unemployment.",
+  "Nope, not even close. Alexa is judging you right now.",
+  "WRONG! That answer belongs in a museum of terrible decisions.",
+  "Incorrect. Somewhere a Wi-Fi router got smarter just by being near you.",
+  "WRONG! Even a coin flip has better odds than whatever that was.",
+  "Nope! That's the kind of wrong that ends up in a group chat screenshot.",
+  "WRONG! Your search history called, it wants credit for that answer.",
+  "That's wrong on a cellular level. Impressive, in the worst way.",
+];
+
+over18WrongFeedback.push(...over18WrongFeedbackExtra);
+
 // Fortune teller style advice for end game (18+) - PRAISE for a WIN
 export const over18FortunePraise = [
   "🔮 The spirits whisper: Your neural pathways are intact, but fragile. Guard your mind from the endless scroll of TikTok or you'll join the dopamine-addicted masses. The future belongs to those who can still think. Use that power wisely.",
@@ -76,6 +97,17 @@ export const over18FortuneInsult = [
   "🔮 Cosmic truth emerges, unflattering: You are exactly what the algorithm was built to produce - reactive, distracted, and defeated by a children's trivia format. Congratulations, the system worked exactly as designed. On you.",
   "🔮 The oracle speaks plainly, for once: You didn't lose because the questions were hard. You lost because thinking has become a foreign language to you. Go find a book. It won't scroll for you, and that's the point.",
 ];
+
+// Additional fortune teller INSULT for a LOSS (18+)
+export const over18FortuneInsultExtra = [
+  "🔮 The oracle sighs, unsurprised: Aliens picked up your answers on their scanners and immediately rerouted their ship. Not because you're dangerous. Because you're not worth the fuel.",
+  "🔮 The spirits confer and reach a verdict: ChatGPT could've bluffed its way through this better than you did, and it doesn't even know what it's saying.",
+  "🔮 A tired prophecy unfolds: You had a robot's worth of stored knowledge in your pocket and still lost to five questions. The machines aren't rising. They're just walking past you.",
+  "🔮 The cosmic ledger is updated: 'fuck' was not, in the end, a strong enough word for what just happened here. The universe is workshopping new vocabulary in your honor.",
+  "🔮 The void considers you, then looks away: Somewhere, your brain rot reached a level cartographers haven't mapped yet. Send postcards.",
+];
+
+over18FortuneInsult.push(...over18FortuneInsultExtra);
 
 // Congratulations for OVER 18 - FINAL GAME RESULT
 export const over18CongratulationMessages = [
@@ -109,6 +141,22 @@ export const over18InsultMessages = [
   "Why don't you try reading some books, you fucking moron, instead of doom-scrolling your way through life?",
 ];
 
+// Additional Insults for OVER 18 - FINAL GAME RESULT
+export const over18InsultMessagesExtra = [
+  "You lost. Somewhere, an AI just added one more reason to replace humanity.",
+  "Fucking loss. Even ChatGPT feels bad for you, and it has no feelings.",
+  "That's a loss. Aliens are still confused what the fuck is wrong with humanity, and you're Exhibit A.",
+  "You lost the game. Your brain rot has officially reached max level.",
+  "GAME OVER. Are you a robot? Because that performance was suspiciously bad, even for a human.",
+  "You lost. 'Fuck' isn't a strong enough word for how bad that was, honestly.",
+  "Loss confirmed. Somewhere your phone is more disappointed in you than your parents are.",
+  "You lost. This is what happens when the group chat has been right about you all along.",
+  "GAME OVER. Even autocorrect has given up trying to fix you at this point.",
+  "You lost. Somewhere a robot just got promoted past you, and it didn't even try.",
+];
+
+over18InsultMessages.push(...over18InsultMessagesExtra);
+
 // Messages for UNDER 18 - IMMEDIATE FEEDBACK (CORRECT)
 export const under18CorrectFeedback = [
   "YES!!! You got it RIGHT! 🎉",
@@ -132,6 +180,27 @@ export const under18CorrectFeedback = [
   "CORRECT! Your brain is working beautifully!",
   "That's it! STRAIGHT UP CORRECT!",
 ];
+
+// Additional OVER 18 - IMMEDIATE FEEDBACK (CORRECT) - backhanded compliments
+export const over18CorrectFeedbackExtra = [
+  "Aliens are literally confused right now, wondering what the fuck happened to your species to make this rare.",
+  "Fucking genius! ...or you just asked ChatGPT under the table. We're watching you.",
+  "Are you a robot? Because that answer was suspiciously competent.",
+  "CORRECT! Somebody call NASA, we've detected actual intelligence on this planet.",
+  "Damn, 'fuck' isn't even a strong enough word for how right that was.",
+  "Correct! Your brain just filed a rare complaint form: 'please use me more often.'",
+  "Whoa, slow down Einstein, you're making the rest of your generation look bad.",
+  "CORRECT! Somewhere a teacher who gave up on you just felt a disturbance.",
+  "You got it right and didn't even Google it. Miracles do happen.",
+  "That's correct. I'm suspicious. Nobody's this sharp after a week of doomscrolling.",
+  "BOOM! Correct. Your phone's screen-time report is lying to somebody, and it's not you.",
+  "Right answer! Either you're a genius or you've got seventeen tabs open. I'll allow it.",
+  "CORRECT! Somewhere, a robot uprising just got postponed another day.",
+  "Fuck yeah, that's right. Somebody check if you've been secretly reading instead of scrolling.",
+  "You nailed it. Honestly kind of suspicious. Are you SURE you're not an AI?",
+];
+
+over18CorrectFeedback.push(...over18CorrectFeedbackExtra);
 
 // Messages for UNDER 18 - IMMEDIATE FEEDBACK (WRONG)
 export const under18WrongFeedback = [
@@ -212,6 +281,17 @@ export const timeoutMessages = [
   "Time expired! Speed isn't your strong suit, is it?",
   "TOO SLOW! Your neural network is congested.",
 ];
+
+// Additional TIMEOUT MESSAGES (18+)
+export const timeoutMessagesExtra = [
+  "TIME'S UP! Even dial-up internet loaded faster than your brain just now.",
+  "TIMEOUT! Somewhere, ChatGPT typed a full essay faster than you typed nothing.",
+  "Ran out of time! Aliens are still trying to understand the delay.",
+  "TIME'S UP! Your brain buffered like a 2009 YouTube video.",
+  "TIMEOUT! Even a robot with a dying battery reacts faster than that.",
+];
+
+timeoutMessages.push(...timeoutMessagesExtra);
 
 // LOGIN PAGE - NICKNAME FEEDBACK
 export const nicknameJokes = [

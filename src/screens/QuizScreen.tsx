@@ -2,7 +2,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { UserHeader } from '@/components/user-header';
 import { AgeGroup, Puzzle } from '@/types/game';
-import { getRandomMessage, pickUniqueMessage } from '@/utils/gameUtils';
+import { checkAnswer, getRandomMessage, pickUniqueMessage } from '@/utils/gameUtils';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, StyleSheet, TextInput, TouchableOpacity, View, useColorScheme } from 'react-native';
 import { timeoutMessages } from '@/data/messages';
@@ -75,7 +75,7 @@ export function QuizScreen({
 
   const handleSubmit = () => {
     if (userAnswer.trim() && !showingFeedback) {
-      const isCorrect = userAnswer.toLowerCase().trim() === puzzle.correctAnswer.toLowerCase().trim();
+      const isCorrect = checkAnswer(userAnswer, puzzle.correctAnswer);
       const message = getRandomMessage(isCorrect, ageGroup, usedFeedback.current);
       setFeedback({ message, isCorrect });
       setShowingFeedback(true);

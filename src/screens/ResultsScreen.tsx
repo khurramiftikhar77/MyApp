@@ -62,6 +62,12 @@ export function ResultsScreen({
           <View style={styles.fortuneBox}>
             <ThemedText style={styles.fortuneMessage}>{fortuneMessage}</ThemedText>
           </View>
+
+          <View style={styles.screenshotBox}>
+            <ThemedText style={styles.screenshotText}>
+              📸 Screenshot this and send it to whoever doubted you
+            </ThemedText>
+          </View>
         </View>
 
         <View style={styles.reviewBox}>
@@ -192,6 +198,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 22,
     fontStyle: 'italic',
+  },
+  screenshotBox: {
+    marginTop: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderColor: 'rgba(255, 193, 7, 0.5)',
+    backgroundColor: 'rgba(255, 193, 7, 0.08)',
+  },
+  screenshotText: {
+    textAlign: 'center',
+    fontSize: 13,
+    fontWeight: '600',
   },
   reviewBox: {
     width: '100%',

@@ -20,8 +20,20 @@ export function getRandomPuzzles(type: 'math' | 'word', count: number = 5): Puzz
   return shuffled.slice(0, count);
 }
 
+// Normalizes an answer for lenient comparison: lowercases, trims, strips
+// punctuation, and drops a leading article so "The Answer Is: Paris!" and
+// "paris" both match "Paris".
+export function normalizeAnswer(value: string): string {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[.,!?"'`]/g, '')
+    .replace(/\s+/g, ' ')
+    .replace(/^(a|an|the)\s+/, '');
+}
+
 export function checkAnswer(userAnswer: string, correctAnswer: string): boolean {
-  return userAnswer.toLowerCase().trim() === correctAnswer.toLowerCase().trim();
+  return normalizeAnswer(userAnswer) === normalizeAnswer(correctAnswer);
 }
 
 // Picks a random entry from `pool`, avoiding anything already in `used` when possible,
