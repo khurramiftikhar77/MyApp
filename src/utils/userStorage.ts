@@ -14,6 +14,21 @@ export interface UserProfile {
 const STORAGE_KEY = '@puzzle_game_user';
 const GAMES_KEY = '@puzzle_game_sessions';
 
+let storageReady = false;
+
+// Initialize storage
+export async function initializeStorage(): Promise<void> {
+  try {
+    // Test if storage is accessible
+    await AsyncStorage.getItem(STORAGE_KEY);
+    storageReady = true;
+    console.log('AsyncStorage initialized successfully');
+  } catch (error) {
+    console.warn('AsyncStorage initialization warning:', error);
+    storageReady = true; // Set to true even if there's an error to prevent blocking
+  }
+}
+
 export async function saveUser(nickname: string, birthYear: number): Promise<UserProfile> {
   const now = new Date().toISOString();
   const user: UserProfile = {
@@ -28,26 +43,37 @@ export async function saveUser(nickname: string, birthYear: number): Promise<Use
   };
 
   try {
+    if (!storageReady) {
+      await initializeStorage();
+    }
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(user));
     return user;
   } catch (error) {
     console.error('Error saving user:', error);
-    throw error;
+    // Don't throw - allow app to continue even if storage fails
+    return user;
   }
 }
 
 export async function getUser(): Promise<UserProfile | null> {
   try {
+    if (!storageReady) {
+      await initializeStorage();
+    }
     const data = await AsyncStorage.getItem(STORAGE_KEY);
     return data ? JSON.parse(data) : null;
   } catch (error) {
-    console.error('Error getting user:', error);
+    console.warn('Error getting user:', error);
+    // Return null on error instead of throwing
     return null;
   }
 }
 
 export async function updateUserProgress(correctCount: number, totalQuestions: number): Promise<void> {
   try {
+    if (!storageReady) {
+      await initializeStorage();
+    }
     const user = await getUser();
     if (!user) return;
 
@@ -60,14 +86,19 @@ export async function updateUserProgress(correctCount: number, totalQuestions: n
 
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(user));
   } catch (error) {
-    console.error('Error updating user progress:', error);
+    console.warn('Error updating user progress:', error);
+    // Don't throw - allow app to continue
   }
 }
 
 export async function clearUser(): Promise<void> {
   try {
+    if (!storageReady) {
+      await initializeStorage();
+    }
     await AsyncStorage.removeItem(STORAGE_KEY);
   } catch (error) {
-    console.error('Error clearing user:', error);
+    console.warn('Error clearing user:', error);
+    // Don't throw - allow app to continue
   }
 }

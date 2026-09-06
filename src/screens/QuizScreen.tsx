@@ -37,17 +37,30 @@ export function QuizScreen({
 
     const timer = setInterval(() => {
       setTimeRemaining((prev) => {
-        if (prev <= 1) {
+        const newTime = prev - 1;
+        if (newTime <= 0) {
           clearInterval(timer);
-          handleTimeout();
+          // Handle timeout through state update
+          setTimedOut(true);
+          setShowingFeedback(true);
           return 0;
         }
-        return prev - 1;
+        return newTime;
       });
     }, 1000);
 
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+    };
   }, [showingFeedback, timedOut]);
+
+  // Handle timeout when timedOut state changes
+  useEffect(() => {
+    if (timedOut && !feedback) {
+      const timeoutMessage = timeoutMessages[Math.floor(Math.random() * timeoutMessages.length)];
+      setFeedback({ message: timeoutMessage, isCorrect: false, isTimeout: true });
+    }
+  }, [timedOut, feedback]);
 
   const handleTimeout = () => {
     setTimedOut(true);

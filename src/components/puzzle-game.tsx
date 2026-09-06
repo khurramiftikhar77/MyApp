@@ -23,19 +23,48 @@ export function PuzzleGameComponent() {
   const [correctCount, setCorrectCount] = useState(0);
   const [resultMessage, setResultMessage] = useState('');
   const [hasWon, setHasWon] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
 
   // Check if user already exists
   useEffect(() => {
+    let isMounted = true;
+    
     const checkExistingUser = async () => {
-      const existingUser = await getUser();
-      if (existingUser) {
-        setUserLoggedIn(true);
-        setUserName(existingUser.nickname);
-        setDisclaimerAccepted(true);
-        setGameState('ageSelect');
+      try {
+        const existingUser = await getUser();
+        if (!isMounted) return;
+        
+        if (existingUser) {
+          setUserLoggedIn(true);
+          setUserName(existingUser.nickname);
+          setDisclaimerAccepted(true);
+          setGameState('ageSelect');
+        } else {
+          // No existing user, show disclaimer
+          setGameState('disclaimer');
+        }
+      } catch (error) {
+        console.error('Error checking existing user:', error);
+        if (isMounted) {
+          // On error, show disclaimer to start fresh
+          setGameState('disclaimer');
+        }
+      } finally {
+        if (isMounted) {
+          setIsInitializing(false);
+        }
       }
     };
-    checkExistingUser();
+    
+    // Small delay to ensure AsyncStorage is ready
+    const timer = setTimeout(() => {
+      checkExistingUser();
+    }, 100);
+    
+    return () => {
+      isMounted = false;
+      clearTimeout(timer);
+    };
   }, []);
 
   const handleDisclaimerAccept = () => {
@@ -55,6 +84,10 @@ export function PuzzleGameComponent() {
       setGameState('ageSelect');
     } catch (error) {
       console.error('Login error:', error);
+      // Still allow user to proceed even if storage fails
+      setUserLoggedIn(true);
+      setUserName(nickname);
+      setGameState('ageSelect');
     }
   };
 
@@ -113,6 +146,11 @@ export function PuzzleGameComponent() {
     setResultMessage('');
     setGameState('ageSelect');
   };
+
+  // Show nothing while initializing
+  if (isInitializing) {
+    return null;
+  }
 
   if (!disclaimerAccepted) {
     return (
